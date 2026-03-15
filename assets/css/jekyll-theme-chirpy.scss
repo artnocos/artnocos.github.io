@@ -30,6 +30,10 @@ body {
   font-family: "Arial", "Roboto", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", sans-serif !important;
 }
 
+table, td, th {
+    border: 1px solid #ccc; /* 枠線を表示する */
+}
+
 .highlight {
   border: none !important;
   border-radius: 0 !important;
