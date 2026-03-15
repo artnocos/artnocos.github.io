@@ -1,0 +1,54 @@
+---
+layout: post
+title: JekyllをTextileで書けるようにする
+category: jekyll
+tags: textile
+---
+POSTを書き始めようとしたところ
+Markdownは改行を入れるのが面倒なので
+先ずはTextileで書けるようにした（LLMができると言うので教えてもらった）
+もっと調整が必要かもしれないがとりあえずこのぐらいで
+_（ちなみに Markdown で改行させるのはバックスラッシュを使うのが一番マシだと思う）_
+
+プラグイン jekyll-textile-converter を追加までは難しくなかったが
+コードブロックはいろいろやらないとそれっぽくならなかった
+空行なしで前の文章に続けてブロックを書くと間隔が大きくなりすぎるようだ
+
+{% highlight shell %}
+export ABC=123 # shell
+{% endhighlight %}
+{% highlight c %}
+int a = 3; // C
+{% endhighlight %}
+{% highlight ruby %}
+r = nil # Ruby
+{% endhighlight %}
+{% highlight python %}
+odds = [i for i in range(10) if i % 2 == 1] #Python
+{% endhighlight %}
+後は続けて書いても大丈夫
+
+bc(c). int h = 0; //bcだとハイライトなし
+
+---
+
+以下は試し書き "参考 Textile記法":https://redmine.jp/tech_note/textile/
+
+一行空けると段落
+次の行：何も書かなくても改行されている
+
+* 箇条書きその１
+* 箇条書きその２
+
+# 番号付き１
+# 番号付き２
+
+_斜体_
+*太字*
+-取り消し線-
+
+Redmineの表はもうちょっときれいに出た気がする（CSSの調整が必要？）
+
+|_=. P |_=. T |_=. F |
+| Y | 10 | 260 |
+| F | 30 | 620 |
