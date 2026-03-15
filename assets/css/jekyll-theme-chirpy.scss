@@ -29,3 +29,45 @@ html {
 body {
   font-family: "Arial", "Roboto", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Meiryo", "Yu Gothic", sans-serif !important;
 }
+
+.highlight {
+  border: none !important;
+  border-radius: 0 !important;
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+p + .highlight {
+  margin-top: -1em !important; /* マイナスの値で隙間を「吸い寄せる」 */
+}
+
+pre {
+  position: relative;
+  margin: 0.5rem 0;
+  background: var(--highlight-bg-color);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  padding-right: 3rem;       /* ボタン分の余白 */
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--highlight-bg-color);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.copy-btn.copied {
+  color: #2a9d5c;
+  border-color: #2a9d5c;
+}
