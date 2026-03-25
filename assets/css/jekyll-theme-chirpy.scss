@@ -9,19 +9,24 @@
 
 /* append your custom style below */
 $tsukiyoPaleBlue: #D4E6FF;
+$codeBlockBg: #FFFCDC;
 
 html {
+  --code-block-bg: var(--highlight-bg-color);
+
   @media (prefers-color-scheme: light) {
     &:not([data-mode]),
     &[data-mode='light'] {
         --sidebar-bg: #{$tsukiyoPaleBlue};
         --sidebar-hover-bg: rgb(10, 10, 10, 0.15);
+        --code-block-bg: #{$codeBlockBg};
     }
   }
   @media (prefers-color-scheme: dark) {
     &[data-mode='light'] {
         --sidebar-bg: #{$tsukiyoPaleBlue};
         --sidebar-hover-bg: rgb(10, 10, 10, 0.15);
+        --code-block-bg: #{$codeBlockBg};
     }
   }
 }
@@ -50,29 +55,58 @@ p + .highlight {
 pre {
   position: relative;
   margin: 0.5rem 0;
-  background: var(--highlight-bg-color);
-  border: 1px solid #e0e0e0;
+  background: var(--code-block-bg);
+  border: 1px solid var(--blockquote-border-color);
   border-radius: 6px;
   padding: 0.75rem 1rem;
   padding-right: 3rem;       /* ボタン分の余白 */
   overflow-x: auto;
-  font-size: 13px;
   line-height: 1.6;
+}
+
+.highlight pre {
+  font-size: 0.95rem;
 }
 
 .copy-btn {
   position: absolute;
   top: 6px;
   right: 6px;
+  color: var(--code-color);
   background: var(--highlight-bg-color);
-  border: 1px solid #ccc;
+  border: 1px solid var(--checkbox-color);
   border-radius: 4px;
   padding: 2px 8px;
-  font-size: 11px;
+  font-size: 0.8rem;
   cursor: pointer;
 }
 
 .copy-btn.copied {
   color: #2a9d5c;
   border-color: #2a9d5c;
+}
+
+/* quote */
+.quote-block {
+  margin: 0.5rem 0;
+  border-radius: 6px;
+  border: 1px solid var(--blockquote-border-color);
+  overflow: hidden;
+}
+
+.quote-block figcaption {
+  background: var(--code-block-bg);
+  padding: 0.25rem 1rem;
+  font-size: 0.975rem;
+  border-bottom: 1px solid var(--blockquote-border-color);
+}
+
+.quote-block blockquote {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-style: normal;
+  font-size: 0.9rem;
+  background: var(--highlight-bg-color);
+  color: var(--text-color);
+  border-left: none !important;  /* Chirpyのデフォルト左線を消す */
 }
