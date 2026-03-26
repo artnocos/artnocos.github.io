@@ -1,0 +1,39 @@
+---
+title: GitLab Runnerでコンテナ(Podman, Docker Executor)のMACアドレスを指定
+category: gitlab
+tags: podman
+---
+Executorとして動かすコンテナのMACアドレスを指定（固定）する設定方法
+
+h2. *環境*
+
+動作を確認した環境
+* 自己管理（自分でインストールした）GitLab Runner [alpine3.21-v17.7.0]
+* (Docker Executor) Podmanルートレスモード [4.9.3]
+* WSL2 [Ubuntu 24]
+
+h2. *設定*
+
+config.tomlの要点
+
+{% highlight toml %}
+[[runners]]
+  executor = "docker"
+  environment = ["FF_NETWORK_PER_BUILD = 1"]
+
+  [runners.docker]
+    mac_address = "02:aa:bb:cc:dd:ee"
+{% endhighlight %}
+
+h2. *補足*
+
+GitLabでPodmanを使いつつMACアドレスを固定にするという非常にニッチな話題
+
+dockerコマンドではコマンドラインオプション "*--mac-address*":https://docs.docker.jp/v17.06/engine/reference/run.html#network-settings によりMACアドレスを指定できる（ "Podmanにも同様のオプション":https://docs.podman.io/en/v4.9.3/markdown/podman-create.1.html#mac-address-address が見つかる）
+Runnerでは設定ファイル *config.toml* に "Docker Executorを使う場合の設定":https://gitlab-docs.creationline.com/runner/executors/docker.html#use-the-docker-executor を書く
+Runnerから起動するDockerコンテナでMACアドレスを指定するには "高度な設定の[runners.docker]セクション":https://gitlab-docs.creationline.com/runner/configuration/advanced-configuration.html#the-runnersdocker-section にある *mac_address* の設定を書けばいい
+GitLabは "Podman（v4.2.0以降）に対応":https://gitlab-docs.creationline.com/runner/executors/docker.html#use-podman-to-run-docker-commands しているとあってExecutorを起動するだけならそれほど難しくはない（docker-sockを割り当てたり色々あるといえばあるのだが…）
+しかしながら *FF_NETWORK_PER_BUILD* を設定していないとconfig.tomlでMACアドレスを指定していても無視される
+FF_NETWORK_PER_BUILDについてはPodmanに関する記述のところにも出てきてはいて、DockerとPodman（ルートレスモード）のネットワークの違いが関係していると思われるが "FF_NETWORK_PER_BUILD自体の説明":https://gitlab-docs.creationline.com/runner/executors/docker.html#create-a-network-for-each-job を読んでも _「このネットワークモードを有効にすると、Runnerはジョブごとにユーザー定義のDockerブリッジネットワークを作成して使用します。」_ と書いてあって読んでもPodmanとの関係はよくわからない
+
+なにはともあれGitLabでPodmanを使用している環境でMACアドレスの指定は動作しましたよ、という話
