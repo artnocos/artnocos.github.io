@@ -40,7 +40,9 @@ table, td, th {
     border: 1px solid #ccc; /* 枠線を表示する */
 }
 
+.highlight .w,
 .highlight {
+  background-color: var(--code-block-bg);
   border: none !important;
   border-radius: 0 !important;
   background: none !important;
