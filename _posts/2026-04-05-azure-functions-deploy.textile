@@ -1,0 +1,149 @@
+---
+title: Azure Functionsのデプロイ (IoT Hub, EventHubTrigger)
+category: azure
+tags: functions iot
+---
+なんらかの都合（しがらみ）がなければクラウドを使う際にAzureを積極的に選択することは無いと思う
+AWSなどを選んだ方が情報が多くトラブルシューティングがしやすい
+これはAzure Functionsで *IoT Hub* の受信データを処理しようとして苦労した自分用のメモ
+クラウドは操作方法や、できることがコロコロ変わるので、このPOSTも「2026年3月頃にこうしたらできた」というだけの記録になる
+とりあえず関数の起動確認までできたのでまとめておく
+
+h2. 手順
+
+流れは以下の通り（現状で確認できているもの、Python V2モデル利用）
+# VS CodeのAzure拡張機能でプロジェクトを作る
+# 関数アプリを作る
+# 接続文字列を設定
+# デプロイ
+# 不要なEvent Hubs名前空間を削除
+
+h3. *1. VS CodeのAzure拡張機能でプロジェクトを作る*
+
+"コマンド Azure Functions: Create New Project... を検索して実行":https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-develop-vs-code?tabs=node-v4%2Cpython-v2%2Cisolated-process%2Cquick-create&pivots=programming-language-python#create-an-azure-functions-project
+
+Azure CLIを使うのとVS Codeの拡張機能を使うののどちらが楽かは微妙だが、インストールするのが楽そうな拡張機能のほうを使ってみた
+使用したAzure Functions for Visual Studio Codeのバージョンは 1.20.3
+ウィザードへの回答の主なものは以下の通り（バージョンが変われば変わると思う）
+
+* *Select the folder that will contain your function project*
+Functionsのコード類を格納するためのフォルダを新規作成して指定する、このフォルダの中に @.vscode@ というフォルダができる状態にしないといけないようだ（普段VS Codeを使わないのでハマった）
+
+* *Select a project type*
+Python V2モデルを使用するのでここでは *Python* を指定、以前はV1/V2を選べた気がするが今は強制的にV2モデルになるようだ
+※V1/V2はAzure Functionsにおけるプログラミングモデルの話、Python自体はバージョン3.13を使用
+Select a Python interpreter... と出るが *Skip virtual environment* とする（ちゃんと環境設定してローカルにデバッグするのが楽なユースケースもあるとは思うが、今回のケースは環境設定するほうが面倒なので）
+
+* *Select a template for your project's first function*
+今回のケースでは *IoT Hub* の *イベントハブ互換エンドポイント* を使うので（IoT Hubは選択肢に無いので） *EventHub trigger* を選ぶ（これがトラブルの原因の１つなので *Skip for now* を選ぶのも手なのだが、テンプレートを生成してほしいので選択することにする…）
+(5/8)Name of the function... と出て関数名を指定することになるが、後で書き換えてもいいのでデフォルトの @eventhub_trigger@ のままにしておく
+(6/8)the name of the event hub from...は正しい名前を設定したほうがよさそうに思うが、間違っていても（デフォルトのままでも）なぜか動作した
+
+* *Select the app setting with your Event Hub connection string from "local.settings.json"*
+今回はローカルでのデバッグを行わないのでデフォルトの設定を作ってもらう
+（ *+ Create new local app setting* を選択）
+
+_ここでサブスクリプションを選ぶため、サインイン等を行うことになるが割愛_
+
+* *Select an event hubs namespace*
+*+ Create event hubs namespace* を選択して適当な名前で作成する（後で削除することになるのでメモしておく）
+テンプレートの選択で *EventHub Trigger* を選んだのでイベントハブが必要になった
+イベントハブは名前空間の下にできるものらしく、そのEvent Hubs名前空間を指定（作成）する
+しかしながら今回使うのは *イベントハブ互換エンドポイント* であって、イベントハブそのものは必要ない、エンドポイントはIoT Hubを作ったときに自動的に作られている
+今回使用したバージョンのVS Code拡張機能でIoT Hubの互換エンドポイントを指定する方法は分からなかった（おそらく未対応）
+適当な名前で作っておき、使わないので後で削除する
+ここでは仮に enamespace などと定義しておくが重複しない名前を付けないといけないようだ
+
+ここまでで以下のようなファイルが自動生成される
+
+*function_app.py*
+
+{% highlight python %}
+import azure.functions as func
+import logging
+
+app = func.FunctionApp()
+
+@app.event_hub_message_trigger(arg_name="azeventhub", event_hub_name="myeventhub",
+                               connection="enamespace_RootManageSharedAccessKey_EVENTHUB") 
+def eventhub_trigger(azeventhub: func.EventHubEvent):
+    logging.info('Python EventHub trigger processed an event: %s',
+                azeventhub.get_body().decode('utf-8'))
+{% endhighlight %}
+
+作られた *local.settings.json* を見ると分かるがconnection=で指定している @enamespace_RootManageSharedAccessKey_EVENTHUB@ は関数アプリに設定しておく *環境変数* を表している（プレフィックスのenamespaceは先ほど適当に決めたイベントハブ名前空間）
+
+"connectionの説明":https://learn.microsoft.com/ja-jp/azure/azure-functions/functions-bindings-event-hubs-trigger?tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cfunctionsv2%2Cextensionv5&pivots=programming-language-python#connections は以下のように書かれている（これを読んでも環境変数のこととは分からなかった）
+
+bq. 
+connection プロパティは、アプリを Event Hubs に接続する方法を指定する環境構成への参照です。 次が指定されている場合があります。
+* 接続文字列を含むアプリケーション設定の名前
+
+_環境構成_ の部分が _environment configuration_ になっている "英語版ドキュメント":https://learn.microsoft.com/en-us/azure/azure-functions/functions-bindings-event-hubs-trigger?tabs=python-v2%2Cisolated-process%2Cnodejs-v4%2Cfunctionsv2%2Cextensionv5&pivots=programming-language-python#connections の方がまだ分かりやすい気がする
+
+h3. *2. 関数アプリを作る*
+
+Azure Functionsを動かすための関数アプリを作る
+VS Code拡張機能からも作れるようだが今回はAzureポータルで直接作った
+数年前には無かったFlex Consumptionなどができていて、指定できるパラメータの組み合わせも変わるようなので、作り方は割愛
+サーバーレスと言いつつ色々サーバ用の環境設定が必要なので、コンテナで作ってしまった方が分かりやすいように思う
+
+h3. *3. 接続文字列を設定*
+
+関数アプリの環境変数（上述の例ではconnectionに指定した @enamespace_RootManageSharedAccessKey_EVENTHUB@ ）に接続文字列を設定する
+*これをやっておかないと次のデプロイに失敗する* （失敗する要素は他にもあるかも）
+接続文字列はIoT Hubの「ハブ設定」＞「イベントハブ互換エンドポイント」からコピーする
+（本当なら接続文字列ではなくマネージドIDを使いたいところなのだが…）
+環境変数を追加後に「適用」ボタンを押し忘れるミスも何度もやった
+
+h3. *4. デプロイ*
+
+VS Code拡張機能から *Deploy to Azure...* を選択する
+うまくいけば関数アプリに関数名が表示される（例では @eventhub_trigger@ ）
+
+ここでハマるとかなり悩むことになる（コードは自動生成されたものそのままなのにどこがおかしいのか？などと思ったりする）
+前のステップで接続文字列を設定したが、設定にミスがあると実行時エラー（接続失敗）などではなく、デプロイ自体が行われない（関数名が表示されない）
+しかもVS Code上ではエラーなどが報告されず、成功したように見える
+同様の事象は "Azure Functions Python Deployment Issue - VS Code Shows Success But Files Never Appear in Portal":https://learn.microsoft.com/en-us/answers/questions/5564371/azure-functions-python-deployment-issue-vs-code-sh などでも報告されている
+
+bq. （日本語訳）
+皆さん、この問題にとてもイライラしています。（中略）
+VS Codeを通じてAzureにデプロイしようとすると、デプロイが成功したことがわかります。しかし、Azureポータルを確認すると、私の関数アプリは完全に空になります。ファイルなし、関数なし。
+
+設定に問題があるとデプロイしても動作しないのは分かるが、実行させてエラーメッセージなどが確認できる状態にならないと何が悪いのか分からない
+マネージドIDも最初から設定したいところだが一旦デプロイが成功して動く状態にならないとデバッグが大変なのでとりあえず動く状態にしている
+
+先に引用した報告でも以下のようなコメントがある
+
+bq. （日本語訳）
+このプロセスは非常に問題が多いため、これを根本的に解決するには、まず最小限の機能を持つ関数アプリをAzureにデプロイすることから始めるしかありません。そのためには、まっさらな状態から始め、VS CodeのHTTPトリガーテンプレートを使用してください。デプロイが正常に完了し、概要ページに表示されたことを確認したら、少しずつ変更を加えながら段階的にデプロイを進めてください。
+問題は、Python自体にエラーがあったり、host.json、local.settings.json、requirements.txtなどにエラーがあったりすると、デプロイは成功したと報告されるものの、当然ながら何も動作せず、何も表示されないことです。最終的には、コードを少しずつ修正していくことで、問題のある行を特定できます。
+残念ながら、このプロセスは、正常にデプロイが完了しても概要に正しく表示されるまでに5～10分かかる場合があるという事実によってさらに複雑になります。そのため、試行の合間に休憩を取り、常に画面を更新する必要があります。頑張ってください、そして楽しんでください。
+
+上記コメントにもあるように、間違っている箇所が分かって（分かったと思って）修正して、再起動などをしてみても、すぐには反映されないことがある、そして「これを直せば動くと思ったが勘違い？」などと思って修正を元に戻して（間違っている状態に戻して）しまったりするので、動作する状態にするのが大変だ（楽しんだりできなかった）
+
+h3. *5. 不要なEvent Hubs名前空間を削除*
+
+関数アプリに関数名が表示され、実行が確認できれば後はお片付け
+VS Code拡張機能により生成されたEvent Hubs名前空間は不要なので削除する
+まだ自動生成したコードが起動するのを確認しただけなので、ここから必要な機能を実装していくことになる
+
+h2. あとがき
+
+２年ほど前、同様にAzure Functionsを使ってその時はLog Analyticsにデータを格納した
+Python V1モデル + Azure CLIの組み合わせで行った
+
+今回はAzure FunctionsからPostgreSQLにデータを格納する構成を動かしている
+色々忘れているが２回目だからなんとかなるだろう、時間もないしCLIをインストールするのも手間だからVS Code拡張機能を使えば楽なんじゃないか
+そんな風に考えてはじめてみたがV2モデルでは関数アプリに関数名さえ表示させられない
+MS Learnの日本語自動翻訳ではV1モデルのドキュメントがまともに読めなくなっていたが、昔作ったコードや英語版ドキュメントを参照して、ＬＬＭに聞いたりしながら何とかV1モデルのコードでデータベースにデータをINSERTできるようにした
+とりあえずデモを見せられる状態まで作って締め切りに間に合わせたので、V2モデルで動かすにはどうすればよかったのか調べなおしたのがこの記録
+
+Microsoftの人曰く「Azure Functionsがよく使われており、ほとんどのケースはコンテナなど使わなくてもAzure Functionsで十分ではないか」
+よくあるユースケースでサンプルそのままで事足りるようなものなら確かにそうかもしれない
+しかしサーバーレスのような、複雑な仕組みをシステム側で用意して、ユーザが少しの設定をするだけで動作するようにしているものは、ちょっと変わったことをしようとすると途端に開発が難しくなるように思われる
+私がsystemdを好まないのも同様の理由だ（とある要件を実装をした際、動作確認・デバッグがとても面倒だった）
+多少面倒でもコンテナなどにより開発時と運用時で動作環境をそろえられるほうが楽になると考える
+（今回はIoT Hub(Event Hubs)というPaaSを利用したので、たとえコンテナを使ってもローカルで楽に動作確認ができたとは思えない、なのでサーバーレスでもいいとは思うが簡単なコードを動かすだけでもかなり手間取った）
+
+データベースとの接続など、続きの部分は気が向いたら書くかもしれないが、よくある内容なのでＬＬＭなどに聞いても分かると思う
