@@ -1,0 +1,59 @@
+---
+title: 半加算器(Half-Adder)を作ってみた
+category: electronics
+tags: half-adder xor and breadboard
+image:
+  path: /assets/img/posts/2026-05-08-half-adder/half-adder-t4-breadboard.webp
+  alt: ブレッドボード上の半加算器
+---
+電子回路入門の本を読んでいたところに、Dr.STONEのアニメで「半加算器はXORゲートとANDゲートがあれば作れるさ」というセリフを聞いたので、作ってみることにした
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Q3ASiWYqST8?si=UXZZ9svb5N3HhIEh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+h2. 回路図
+
+作り方は何通りかあると思うが、コイルから作る気力はなかったので、電子部品で作ることにする
+XORゲートとANDゲートのICで作るのが正しいのかも知れないが、ICを持っていない、それぞれのゲートが１つずつになるように作りたい、というのもあってダイオードやトランジスタで作ることにした
+
+作った回路は以下（スイカの部分がXORで、コハクの部分がAND）
+
+!/assets/img/posts/2026-05-08-half-adder/half-adder-t4-falstad.png!
+
+回路図の作図には "Falstad":https://www.falstad.com/circuit/ を使用
+<a href="/assets/img/posts/2026-05-08-half-adder/half-adder-t4.txt" download>ファイル half-adder-t4.txt</a> を読み込ませればブラウザ上でシミュレーションできる
+
+XORの部分は "Simple XOR logic elements on transistors - EDN":https://www.edn.com/simple-xor-logic-elements-on-transistors/ のFigure4
+ANDの部分は "NOR and NAND Gates using transistor":https://theorycircuit.com/digital-electronics/nor-and-nand-gates-using-transistor/ のNAND（を反転させた）
+を参考にしている
+
+ブレッドボードでは上側がAND、下側がXOR
+サンハヤトの６列タイプでパズルゲームのようにしてなんとか配置した
+
+h2. 参考文献
+
+h3. "ゼロから学ぶディジタル論理回路 - 秋田　純一":https://www.kodansha.co.jp/book/products/0000148807 (ISBN: 9784061546660)
+
+読みやすいがところどころ誤字があるので読む際は "正誤表":https://ifdl.jp/akita/0digi/errata.html を見ながらがいい
+NANDゲートのICを使ってブレッドボードに回路を作るところを参考にした
+本ではトグルスイッチが使われていたが、手持ちが少なかったのと、ブレッドボードで使いにくいというのがあって、作ったものはタクトスイッチ＋プルダウン抵抗にしている
+
+h3. "カラー徹底図解 基本からわかる電子回路 - 高崎　和之":https://www.natsume.co.jp/np/isbn/9784816370465/ (ISBN: 9784816370465)
+
+分かりやすいがデジタル回路に関する部分は後半に少し載っているだけなのでそこしか読んでいない
+ANDゲートの回路例などを参考にした（AND回路をダイオードで実現する例は "他の書籍":https://www.ohmsha.co.jp/book/9784274206092/ でも見た）
+これらの本を見て最初はダイオードでANDゲートを作ろうとした
+
+実際に "Tinkercad":https://www.tinkercad.com/ で "シミュレーションできるところまで作った":https://www.tinkercad.com/things/9mkGC93j6yU-half-adder-1tr-7d?sharecode=0G90nhlN-SDA4u7VyTpsOsZ-BkcC17DN2DZSZfTJvr8
+しかし、トグルスイッチのブレッドボードへの載せ方に困り、タクトスイッチへの変更を考えたが、大きく変更せずに作るいい案が思いつかなかった
+トランジスタをあまり持っていないと思ってダイオードを多く使う回路で作ろうとしていたが、昔なんとなく買った秋月のお楽しみ袋にトランジスタが結構入っていることに気づき、トランジスタを４つ使う回路にした（トランジスタを使うことにしたのでタクトスイッチでも大丈夫な回路を作れた）
+なおダイオードでXORを作る回路（Tinkercad版）は "Bipolar XOR gate with only 2 transistors":https://hackaday.io/project/8449-hackaday-ttlers/log/150147-bipolar-xor-gate-with-only-2-transistors/ を参考にした
+
+Tinkercadはすでに回路図があるものをブレッドボードに配置してシミュレーションするには便利だったが、ネットで見つけた回路を少し変形しないといけない場合に、いきなりブレッドボードに部品を置いて作っていくことができなかったので、作り直す際にはFalstadを使用した
+Tinkercadをやめた理由には、Tinkercadで使えるブレッドボードが５列しかないタイプで、サンハヤトの６列タイプのものが再現できなかったというのもある
+
+h3. "図解 つくる電子回路 - 加藤　ただし":https://www.kodansha.co.jp/book/products/0000194514 (ISBN: 9784062575539)
+
+トランジスタの脚の曲げ方から丁寧に書かれていて、昔買ったものを今回も読み直した
+ずっとソフトウェアをやってきた自分には具体的な部品をどうやって選ぶかも以前はよく分からないものだったが、この本を読んで少しはイメージできるようになった
+今回、抵抗の値はＡＩに聞いて決めているが、この本を読んでいなければ何をどう聞けばいいのかも分からなかったと思う
+今ならＡＩが抵抗値も含めて最初から完璧な回路図を出してくれるのでは？と期待したが、ハルシネーションが多くて、結局自分でネット検索して作った
