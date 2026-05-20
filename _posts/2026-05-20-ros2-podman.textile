@@ -1,0 +1,77 @@
+---
+title: Podmanを使ってROS2のノードを動かす
+category: ros2
+tags: jazzy, podman
+---
+Podman（ルートレス）でのROS2の動かし方について
+
+ROS2の "ディストリビューションはJazzy":https://docs.ros.org/en/jazzy/Releases.html を使用
+Dockerを使用してROS2を動かす場合の例はROS2ドキュメントサイトの "Running ROS 2 nodes in Docker":https://docs.ros.org/en/jazzy/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html に記載がある
+しかし単純にリンク先ページに記載のコマンドの @docker@ の部分を @podman@ に置き換えただけではDockerとPodmanの差異によりうまく動かない場合がある
+以下ではPodmanを使用する場合のコマンド例を記載する
+環境はWSL2のUbuntu24を使用しているが、一部Raspberry Pi OS (trixie)での動作についても書いている
+
+h2. Dockerイメージを（Podmanで）取得する
+
+{% highlight sh %}
+podman pull docker.io/osrf/ros:jazzy-desktop
+{% endhighlight %}
+
+@docker@ コマンドを使う場合はデフォルトでdocker.ioからイメージを検索するのでdocker.ioの部分は省略されていることが多い
+しかしPodmanは（Docker社が作ったわけではないので）デフォルトでdocker.ioを見にいかない、あらかじめ設定しておくか、上記の例のように明示的に指定するかのどちらかが必要
+ドキュメントサイトのページにあるコマンドの @docker@ の部分を @podman@ 置き換えただけだと以下のようなエラーが出てイメージを取ってこれない
+
+{% quote %}
+Error: short-name "osrf/ros:jazzy-desktop" did not resolve to an alias and no unqualified-search registries are defined in "/etc/containers/registries.conf"
+{% endquote %}
+
+Podmanでもメジャーなイメージにはエイリアスが設定されているので、docker.ioを指定しなくても（ @docker@ コマンドと同じように指定しても）動作する場合があるのが起きている現象を分かりにくくしているように思う
+動作確認に使用するhello-worldなどは以下のように設定されているので、 @podman pull hello-world@ で問題なく動作する
+
+{% quote /etc/containers/registries.conf.d/shortnames.conf %}
+  "hello-world" = "docker.io/library/hello-world"
+{% endquote %}
+分かってしまえば（エラーメッセージを読んで理解できれば）どうということもないが「コマンドもほとんど同じみたいだからPodmanを使ってみるか」で始めると「hello-worldは動いたのになぜROS2だと動かない？」のように悩むことになる
+ダウンロード先のデフォルトを設定しておいてもいいが、どこにあるイメージを使うか明示しておくのも悪くないのでdocker.ioを都度指定することにする
+
+なお Raspberry Pi つまり <strong>arm</strong>64 の場合、jazzy-desktop版イメージが用意されていない（ダウンロードできる jazzy-desktop は <strong>amd</strong>64 版だけ）ので、代わりに jazzy-ros-base などを使うことになる
+
+{% highlight sh %}
+podman pull docker.io/library/ros:jazzy-ros-base
+{% endhighlight %}
+desktop版でないとチュートリアルに出てくるturtlesimなどが動かせないので、動かし方を調べたりするのはWSL2などで行うのがよいと思う
+
+h2. ROS2コンテナ実行
+
+"Run two nodes in two separate docker containers":https://docs.ros.org/en/jazzy/How-To-Guides/Run-2-nodes-in-single-or-separate-docker-containers.html#run-two-nodes-in-two-separate-docker-containers に書かれているコマンドと同じことを実行するには以下のようにする
+
+{% highlight sh %}
+podman run -it --rm \
+       --net=host --ipc=host \
+       docker.io/osrf/ros:jazzy-desktop ros2 run demo_nodes_cpp talker
+{% endhighlight %}
+
+{% highlight sh %}
+podman run -it --rm \
+       --net=host --ipc=host \
+       docker.io/osrf/ros:jazzy-desktop ros2 run demo_nodes_cpp listener
+{% endhighlight %}
+
+あらかじめ @podman pull@ してあれば、ドキュメントサイトの例と同じように @docker.io/@ の部分がなくても動作するようだ（「この場合は付けなくても良かったんだっけ」と気にするのも面倒なので付けておく）
+上記の例のように @docker.io/@ を付けておけば、あらかじめ @podman pull@ せずに @run@ することもできる（自動で @pull@ が成功するので）
+
+@docker@ コマンドの場合はデフォルトの "ブリッジ・ネットワーク":https://docs.docker.jp/network/bridge.html のままでROS2コンテナも動作する
+@podman@ でルートレスのコンテナを使う場合はデフォルトのブリッジのままではROS2コンテナが動作しない、より正確には、動作はするが他のコンテナで動いているROS2ノードを見つけられない
+そのため @--net=host@ としてネットワークモードを @host@ にして、さらに @--ipc=host@ も指定する
+（ルートフルで動かす、ネットワークを別に作る、等の方法もあるが host にして直接ノードが見える状態のほうが動作確認には便利なように思うのでこうしている）
+
+以下、少しだけ解説
+Dockerのブリッジ・ネットワークはLinuxカーネルの機能でブリッジを作成している
+Dockerで同じマシンでコンテナを作れば同じブリッジにコンテナがぶら下がるのでコンテナ内のROS2ノードがお互いを見つけることに何の問題もない
+かたやPodmanをルートレス、つまり一般ユーザで動作させていると、カーネルでブリッジを作成するには権限が足りないので、一般ユーザでも可能な別の仕組み（podman 4.9.1 のデフォルトは slirp4nets のようだが 5.0 以降は pasta になるようだ）で、起動するコンテナ毎にネットワークが作成される
+コンテナを２つ作成して、それぞれが別のネットワークにあることになるとマルチキャストでノードを見つけられないので、ROS2コンテナが期待した動作をしない
+
+最後に @docker-compose@ の代わりに、 @podman kube@ を使う方法を書けば、ROS2ドキュメントに書かれた内容に対応する内容を一通り書いたことになる
+@podman kube@ を使えば、あらかじめネットワークを作っておいて、コンテナを作ったネットワークにつなぐ、というようなことが、もう少し楽に実現できたようにも思う
+しかしながら、最終的に @podman kube@ は（今回の試作では）使うのをあきらめたので割愛する
+（ @podman kube@ をやめたいきさつは次回）
