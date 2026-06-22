@@ -1,0 +1,123 @@
+---
+title: コンテナを使ってROS2でシリアル入出力
+category: ros2
+tags: jazzy, podman, serial
+---
+"Podmanを使ってROS2のノードを動かす":{% post_url 2026-05-20-ros2-podman %}  からの続き
+
+Raspberry Pi 3B+でROS2をPodman（ルートレス）コンテナで動かし、シリアル入出力を行った時の設定
+確認に使用したRaspberry Pi OSのバージョンはDebian13(trixie)
+
+h2. @podman@ コマンドライン
+
+{% highlight sh %}
+podman run -d \
+       --replace \
+       --name serial_bridge \
+       --group-add keep-groups \
+       --device /dev/ttyAMA0 \
+       --net=host --ipc=host \
+       -v ./ros2_ws:/root/ros2_ws \
+       --entrypoint /root/ros2_ws/my_ros_entrypoint.sh \
+       ros-jazzy-base-py  ros2 run py_lt serial_bridge
+{% endhighlight %}
+
+@podman@ コマンドのオプションに色々と書いているが、シリアル入出力を行うための権限の設定をしているオプションは以下の部分
+* *@--group-add keep-groups@*
+* *@--device /dev/ttyAMA0@*
+
+最初はYAMLを書いて @podman kube play@ でノードを起動しようとしていた
+しかしながら上記のシリアル入出力をするための設定をYAMLで書こうとしても（例えば @annotations:@ に @run.oci.keep_original_groups: true@ を設定してみても）うまくいかない
+考えてみればクラウドでコンテナオーケストレーションするためのKubernetesと同様のYAMLで、ローカルのデバイスを使う設定を書こうとしているのが用途として合っていない気がした
+使用するPodmanのバージョンによってはkube playでも動かせるようになるかもしれないが、無理にYAMLで動かす必要もないだろうということで、上記のような @podman@ のコマンドラインでROS2コンテナを起動することにした
+
+h2. シリアルデバイスを使用するための権限設定
+
+先ず（コンテナを動かす以前に）ホスト側でシリアル入出力ができるようにする（確認しておく）
+
+<div class="no-copy highlight">
+{% highlight sh %}
+$ ls -l /dev/serial0
+lrwxrwxrwx 1 root root 7 Jun 14 13:38 /dev/serial0 -> ttyAMA0
+
+$ ls -l /dev/ttyAMA0
+crw-rw---- 1 root dialout 204, 64 Jun 14 13:38 /dev/ttyAMA0
+{% endhighlight %}
+</div>
+
+シリアル入出力に使うデバイスファイルは @/dev/ttyAMA0@ になっていた
+ルートレスモードで動かすので、（コンテナを起動する予定の）カレントユーザを dialout グループに追加して @/dev/ttyAMA0@ が使える権限を付与する
+
+{% highlight sh %}
+sudo usermod -aG dialout $USER
+{% endhighlight %}
+
+カレントユーザでシリアル入出力ができることが確認出来たら @--group-add keep-groups@ によりコンテナから付与したグループの権限が使えるようにする
+コンテナからホストにあるシリアル用デバイスにアクセスできるように @--device /dev/ttyAMA0@ を設定する
+
+h2. 補足（その他の設定）
+
+シリアル入出力ができるようにするという意味では上述の内容までで終わりだが、その他の設定について補足しておく
+
+h3. *@-v ./ros2_ws:/root/ros2_ws@*
+
+"Tutorials - Creating a workspace":https://docs.ros.org/en/jazzy/Tutorials/Beginner-Client-Libraries/Creating-A-Workspace/Creating-A-Workspace.html#create-a-new-directory に出てくるディレクトリ @ros2_ws@ をホスト側に作っておき、コンテナ内からマウントするための設定
+
+h3. *@ros-jazzy-base-py@*
+
+ros:jazzy-ros-baseにPythonでシリアル入出力するためのパッケージ等をいくつか追加するために作ったコンテナ("Containerfile":https://github.com/satoshi8732/ros-jazzy-base-py/blob/main/Containerfile)
+
+{% highlight docker %}
+FROM docker.io/library/ros:jazzy-ros-base
+
+RUN apt-get update && apt-get install -y \
+    python3-requests \
+    python3-lgpio \
+    python3-serial \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /root/ros2_ws
+{% endhighlight %}
+
+シリアル入出力としては @python3-serial@ だけがあればいいが
+Raspberry PiでGPIOを使うための @python3-lgpio@
+HTTPリクエストを処理するための @python3-requests@ なども入れている
+作業ディレクトリは先ほどマウントした @/root/ros2_ws@ を指定
+
+（参考）
+* Docker公式の "ROSイメージに関する情報":https://github.com/docker-library/official-images/blob/master/library/ros
+* jazzy-ros-baseの "Dockerfile":https://github.com/osrf/docker_images/blob/master/ros/jazzy/ubuntu/noble/ros-base/Dockerfile
+* "ros_entrypoint.sh":https://github.com/osrf/docker_images/blob/master/ros/jazzy/ubuntu/noble/ros-core/ros_entrypoint.sh
+
+h3. *@--entrypoint /root/ros2_ws/my_ros_entrypoint.sh@*
+
+前述の（公式のドキュメントに載っているDockerイメージに含まれる） @ros_entrypoint.sh@ ではマウントした @ros2_ws@ フォルダが参照されないため、代わりに @ros_entrypoint.sh@ を少し修正しただけの、以下の @my_ros_entrypoint.sh@ を @ros2_ws@ フォルダに置いてエントリポイントとして使用するようにしている
+
+{% highlight sh %}
+#!/bin/bash
+set -e
+
+# setup ros2 environment
+source "/opt/ros/$ROS_DISTRO/setup.bash" --
+
+if [ -f "$HOME"/ros2_ws/install/setup.bash ]; then
+    cd "$HOME"/ros2_ws
+    source ./install/setup.bash
+fi
+
+exec "$@"
+{% endhighlight %}
+
+h3. 落穂ひろい
+
+@--replace@ と @--name serial_bridge@ は毎回コンテナ名が変わると、止めたり再起動が面倒なので付けているもの
+コマンドラインの最後の @ros2 run py_lt serial_bridge@ の部分は公式ドキュメントなどの例と同じ "ros2コマンドの実行":https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html#ros2-run
+（ @py_lt@ と @serial_bridge@ はそれぞれ私が作ったROS2パッケージと実行ノードの名前）
+
+h2. 最後に
+
+ROS2でシリアル入出力を使いたかったのは、モータを駆動させたかったから
+Raspberry PiとArduinoなどのマイコンをシリアルでつなげて、マイコン側でモータを駆動する構成
+ROS2とマイコンを接続するというとmicro-ROSというものがあって、最初はそれを使う検討をしていたが、調べていくうちに要らない気がしてきて使うのをやめた
+今回試作した構成ではクラウドとの接続もしていて、この手のものを接続する際にはMQTTがよく出てくるが、MQTTにも思うところがあって使っていない（HTTPSを使っていて、そのために @python3-requests@ を利用している）そのことについてもそのうち書いてみるつもり
