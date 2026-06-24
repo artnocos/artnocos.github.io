@@ -1,7 +1,7 @@
 ---
 title: CTF参加に際して知っておくといいこと (SECCON Beginners CTF 2026)
 category: security
-tags: ctf, ghidra
+tags: ctf ghidra
 ---
 "SECCON Beginners CTF 2026":https://www.seccon.jp/15/seccon_beginners/ctf.html に参加してみた(2026/6/13 ～ 2026/6/14)
 

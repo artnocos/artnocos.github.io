@@ -1,7 +1,7 @@
 ---
 title: Podmanを使ってROS2のノードを動かす
 category: ros2
-tags: jazzy, podman
+tags: jazzy podman
 ---
 Podman（ルートレス）でのROS2の動かし方について
 

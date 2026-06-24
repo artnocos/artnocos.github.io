@@ -1,7 +1,7 @@
 ---
 title: コンテナを使ってROS2でシリアル入出力
 category: ros2
-tags: jazzy, podman, serial
+tags: jazzy podman serial
 ---
 "Podmanを使ってROS2のノードを動かす":{% post_url 2026-05-20-ros2-podman %}  からの続き
 
