@@ -1,0 +1,177 @@
+---
+title: MQTTについて思うこと
+category: protocol
+tags: mqtt iot
+---
+IoTの文脈でよく出てくるプロトコルのMQTT
+なんでもかんでもMQTTではないんじゃないの？という話
+
+少し前にROS2で動かした自走車のデータをクラウドに送ってgrafanaで見せるというデモを作った
+別のPOSTで "クラウドで使ったAzure Functionsの話":{% post_url 2026-04-05-azure-functions-deploy %} や "ROS2をコンテナで動かした話":{% post_url 2026-05-20-ros2-podman %} を書いた
+クラウドにデータを送る際のプロトコルにはHTTPSを使った
+ROS2でMQTTというのも見かけたがMQTTを使いたい理由がなかったので、より簡単で早く作れるHTTPSを選択した
+
+h2. MQTTを調べたきっかけ
+
+以前の会社で新人がMQTTを使った試作を行っていた
+それを聞いたプロトコルの有識者が「なんでMQTTを使った？ちゃんと調べたのか？」と話していた
+近くの席にいてたまたまそのやりとりを聞き「MQTTってどんなプロトコルなのだろう？」と思ったのがMQTTについて調べるきっかけになった
+その時の新人の答えは「IoTで検索したらMQTTが出てきたから使いました」のようなものだった
+その後２つほどMQTTを使うプロジェクトに関係する機会があり、担当者に同じ質問「なぜMQTTを選んだのか」をしてみた
+いずれも以前の新人と同じような回答だった
+サンプル数は３だがMQTTを使うことにした技術的な説明をしているのを聞いたことは無い
+
+h2. MQTTとは
+
+元はIBMの人が "衛星経由で監視用途として使用する":https://aws.amazon.com/jp/what-is/mqtt/ ために考案したものらしい
+TCP上で動作する "The protocol runs over TCP/IP":https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html
+"ポート番号は1883":https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901233
+MQTT自体に暗号化する機能は無いので暗号化する場合はTLSでラップすることになる（HTTPをTLSでラップしてHTTPSとして通信するようなもの）
+"暗号化する場合のポート番号としては 443 や 8883 が使われる":https://aws.amazon.com/jp/blogs/news/mqtt-with-tls-client-authentication-on-port-443-why-it-is-useful-and-how-it-works/
+
+h3. パケットサイズ
+
+１パケットの理論的な最大サイズは約２５６ＭＢ（Remaining Lengthを "Variable Byte Integer":https://docs.oasis-open.org/mqtt/mqtt/v5.0/os/mqtt-v5.0-os.html#_Toc3901011 の４バイトで表した 268,435,455）
+６４ビットＣＰＵが６４ビットのアドレス空間を持っていて理論上は最大１６エクサバイトのメモリが扱えるといっても実際にＲＡＭとして載っているのはせいぜい数テラバイト、つまり１６ＥＢの数百万分の一であるのと同様、MQTTのパケットの理論的なサイズと実際に１パケットで送受信できるデータ量は異なる
+AWS IoT Coreを使う場合の "Maximum Packet Size は 128kB":https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html
+Azure において "IoT Hubを使う場合は 256-KB max message size. Event Grid の場合は 512-KB max message size.":https://learn.microsoft.com/en-us/azure/iot-hub/iot-mqtt-connect-to-iot-hub#compare-mqtt-support-in-iot-hub-and-event-grid
+
+h3. QoSレベル
+
+MQTTでは "QoSレベルを設定できることになっている":https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html#_Toc398718099 が AWS, Azure ともに使用できる QoS は 0 か 1 だ
+定義されていることと実際に使えるかどうかは違う
+
+{% quote %}
+"MQTT Quality of Service (QoS) options":https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html#mqtt-qos
+The MQTT protocol defines a third level of QoS, level 2, but AWS IoT does not support it.
+{% endquote %}
+{% quote %}
+"Communicate with an IoT hub using the MQTT protocol - Send device-to-cloud messages":https://learn.microsoft.com/en-us/azure/iot-hub/iot-mqtt-connect-to-iot-hub#send-device-to-cloud-messages
+IoT Hub doesn't support QoS 2 messages. If a device application publishes a message with QoS 2, IoT Hub closes the network connection.
+{% endquote %}
+{% quote %}
+"MQTT features supported by the Azure Event Grid MQTT broker - Quality of Service":https://learn.microsoft.com/en-us/azure/event-grid/mqtt-support#quality-of-service
+The MQTT broker supports Quality of Service (QoS) levels 0 and 1
+{% endquote %}
+
+h3. Pub/Sub
+
+MQTTはPub/Sub型の通信でクラウドサービスやROSでも見かける
+送受信先をトピックにより識別する非同期通信
+MQTT5になってRequest/Responseをサポートするようになったようだが、基本が非同期なので何かが大きく変わったわけではない、非同期応答の同期待ちが多少効率よく処理できるようになっただけだ
+（非同期の応答を同期待ちする処理はよくある処理だが、非同期処理が同期処理より簡単になるわけではない）
+
+h2. MQTTをいつ使うか
+
+前述のような特徴を理解してMQTTを使うのなら使えばいい
+
+h3. MQTTを使った事例
+
+以前調べたところだとドコモのバイクシェアサービスではAWSでプロトコルにMQTTを使っていたようだ
+"基幹システムとモバイルデバイス（バイク）との連携：EC2＋IoT Core（FreeRTOSとMQTTで通信）":https://dev.classmethod.jp/articles/awssummit-2021-cus-23/
+おそらくドコモの公衆回線を使うのだろう、IoT専用のプランで通信量を抑えれば、TCPの常時接続を使っていたとしても通信料金は抑えられるのかも知れない
+最初に使われた衛星経由の通信の場合もそうだが公衆回線経由でインターネットを通過しないのなら盗聴自体が難しいので、暗号化のことなど気にしなくてもよさそうだ（バイクシェアサービスが暗号化しているのかいないのかは知らない、元のMQTTがそうであったように暗号化のことを最初から気にしなくても成立するのだろう、というだけ）
+バイクシェアでの用途は位置情報をリアルタイムで送るものだろうから、常時少量のデータを送るのだろう、だからデータサイズも問題とはならなそうだ
+
+h3. IoTと呼ばれる様々な用途
+
+IoT は Internet of Things の略で、ヒトがブラウザを操作してネットショッピングするような用途ではなく、機械（モノ）がデータを送受信する用途を指す、と考えれば IoT という言葉は衛星経由で監視用データを送る以外にも様々な文脈で使われる
+
+例えば機器の使用状況を定期的にクラウドに送りたい場合を考える
+その機器はファイヤーウォール経由でインターネットにつながっているとする
+
+h3. データ送信頻度
+
+「定期的に」というときの頻度はどの程度だろう
+本当にリアルタイムにデータの送受信が必要というならそうするだろう、でも１時間に１回、あるいはもっと長く１日に１回データを同期すればいいという場合はどうだろう
+ガスや電気の使用量を収集するようなものもIoTと呼ばれていて、月に一度の料金計算に利用できればいいのであればデータをリアルタイムに収集するほどでもない、せいぜい１時間に１回ぐらいだろう
+自動車のデータを収集する場合でもデータの種類によっては１日の終わりに車庫に入った際にまとめて送るので十分なものもあるだろう
+家なり会社なりのWi-Fiを経由して送ることにすれば機器に公衆回線を使用する通信機能を持たせなくてもよくて、通信料金も抑えられる
+
+間欠的にデータを送るのであれば、データを貯めておいてまとめて（さらに言えば圧縮して）送ればいい
+そのような送り方をするのであればMQTTである必要はなく、パケットサイズを気にする必要がないHTTPで送るほうが簡単だ
+
+h3. MQTTが軽量と言うのは常時接続が前提
+
+MQTTはHTTPに比べて軽量というが、それはそのように設計したからであって別にMQTTが優れているということではない
+HTTPは元々常時接続を前提としないステートレスなプロトコルだ、それゆえ必要な情報を毎回全てヘッダに載せている、そして分かりやすさを優先してヘッダは全部テキストになっている
+MQTTは一旦接続してしまえば後は必要なデータのみ送るようにプロトコルを設計してある
+小さいデータを頻繁に送るのなら独自のバイナリプロトコルでデータを詰めて送れば送受信するデータ量を抑えられるという当たり前の話で、その前提には常時接続がある
+
+たまにしかデータを送る必要が無い場合ずっと接続を維持するか？そのようにつくることも可能ではあるが、データを送るときに接続して、終わったら切断する、というのであればTCPの接続切断のためのコスト（データ量）が実際に送るデータ量を上回り、MQTTが軽量というのが成り立たない
+
+HTTPのヘッダサイズに比べて送るデータが十分に大きいのであればヘッダサイズの大きさの影響は軽微だ
+Azure の IoT Hub でも大容量のデータを送る場合はHTTPSを使うことになっている
+
+{% quote %}
+"IoT Hub を使用したファイルのアップロード - Note":https://learn.microsoft.com/ja-jp/azure/iot-hub/iot-hub-devguide-file-upload
+デバイスは IoT Hub との通信に使用する任意のプロトコルに加えて、HTTPS 経由で Azure ストレージと通信できる必要もあることを意味します
+{% endquote %}
+
+h3. セキュリティ
+
+今時インターネットを経由するのに暗号化せずにそのまま送るなんてことはない
+MQTTもTLSでラップすることになっている
+ファイヤーウォールを通過する必要があるなら使えるポート番号も限定される
+結果としてMQTT標準の1883やそれを暗号化した8883などのポート番号で通信可能な環境は限定され、HTTPSと同じ443を使ったりすることになる
+HTTPSが使う経路を使ってMQTTを通信するなら、最初からHTTPSを使うのが素直ではないだろうか
+HTTPSであれば元々ファイヤーウォールを通過可能に設定されていることが多いので、ポート番号だけHTTPSと同じにした中身がMQTTのパケットが使用環境のファイヤーウォールを通過可能かどうかを気にしなくてもよくなる
+
+TLSを使うなら接続切断のコストはさらに増えるので、常時接続可能と言う条件でない限り、MQTTが軽量というのはますます成り立たない
+最近はランサムウェアの被害が多発しているため、サイバーセキュリティ対策の１つとして常時接続の見直しが挙げられていたりする
+
+* "医療分野のサイバーセキュリティ対策について":https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryou/johoka/cyber-security.html
+
+{% quote %}
+"VPN 装置等のネットワーク機器におけるサイバーセキュリティ対策の徹底について":https://www.mhlw.go.jp/content/10808000/001679871.pdf
+業務上必要な時以外は外部との接続を遮断してください。
+不要な常時接続により、サイバー攻撃被害に遭った事例が確認されています。
+{% endquote %}
+
+暗号資産をコールドウォレットに保管するのもリスクを低減するためで、使用しないときにはネットワークから切り離しておくというのはよくある対策の１つだ
+
+h3. 一斉配信
+
+MQTTはPub/Sub型なので相手先を個別に指定せずトピックにより複数のデバイスにメッセージを一斉に送る
+マルチキャストを使用するわけでもなくTCPで接続するのに複数デバイスに一斉に送るとはどういうことだろうか？
+そもそも複数のデバイスに一斉に同じメッセージを配信するのは放送と同じようなもので、そのような単純な用途は限られると考えられる
+インターネットの動画配信も放送のように一斉に同じデータを送るのではなく、視聴者ごとに異なるデータを送るのが主流だ
+デバイス毎に個別の制御が必要なケースではトピックなどを使わず直接相手先を指定して個別に通信するほうが簡単に済む
+
+利用する環境によっては一斉配信(broadcast)がサポートされていない（複数デバイスに同じメッセージを送るにはループ処理で繰り返す必要がある）ものもある（デバイス毎の個別制御を主な用途として想定しているためだろう）
+一口にMQTTといっても全ての環境で同じではない
+
+{% quote %}
+"Compare MQTT support in IoT Hub and Event Grid":https://learn.microsoft.com/en-us/azure/iot-hub/iot-mqtt-connect-to-iot-hub?utm_source=chatgpt.com#compare-mqtt-support-in-iot-hub-and-event-grid
+IoT Hub
+No support for cloud-to-device broadcasts or device-to-device communication.
+{% endquote %}
+
+h3. 動作確認
+
+正しく通信が行えるかの確認は面倒なことが多いがHTTPSならcurlコマンドで疎通確認も簡単に行える
+HTTPSならPythonその他の大抵の環境で標準のライブラリで通信することも可能だ
+MQTTの場合はHTTPSほどライブラリ類が標準化されているというわけでもないので何らかのライブラリを選定して使うことになる
+Azureの場合なら "マイクロソフトが用意したSDK":https://learn.microsoft.com/ja-jp/azure/iot-hub/iot-sdks#device-sdks を利用することになるだろう
+他のライブラリを利用することも可能だろうが、実際に利用可能かどうかを確認しておく必要がある
+うまくいかないときに組み合わせたライブラリが悪いのか、自分の作ったプログラムが悪いのか、切り分けすることになる
+curlなどが使えれば、通信の確認で先ずはpingを試すのと同じように段階的に確認できる、しかしMQTTの場合は？
+バイナリのプロトコルだと中身のデータが正しいかを確認するのも面倒だ
+
+h3. 制約条件
+
+特定の環境（例えばAzure）を使用する必要があり、全部のソフトを自作していられない（PaaSが使いたい）というときに、利用しようとする環境・機能がMQTTしかサポートしておらずそれを使うしかない、ということもあるだろう
+
+IoTの文脈でMQTTを勧めているものは自社のMQTTライブラリを買わせようとしているものが多いように思える（標準のライブラリだけでできてしまうとビジネスチャンスにならないので）
+
+h2. まとめ
+
+結局のところMQTTというのは常時接続してもいい環境でデータの送受信量を少しでも減らすのが最優先事項というときに選択するものだ
+そしてIoTというとき必ずしもそのような条件が全てのケースで当てはまるわけではない
+プロトコルの選択は「googleで検索したらIoTにはMQTTと出た」「AIに聞いたらIoTといえばMQTTと言われた」そんな安直なものでは無いと思う
+以前働いていた（プロトコルの専門家がいた）ところでは特にセキュリティが重要な製品を開発していた
+たとえ試作であったとしても、そこで「IoTで検索したらMQTTが出てきたから使いました」のようなレベルで新人がプロトコルを選んでいたので、先のようなやりとりになったのだろう
+
+IoTとして語られる製品でUDPを使っていて暗号化にDTLSを利用するものを知っている
+バッテリ消費を抑えるためイベントが発生したときなどにしか通信を行わないようにプロトコルの細部はその製品の要件に合わせて設計されていた
+技術として、既存のものを採用するか、新規で設計するかは、様々な要因により決定するものだろう
