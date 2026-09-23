@@ -41,7 +41,7 @@ h2. *問題の形式*
 h3. web
 
 {% quote %}
-!/assets/img/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-portfolio.webp!
+!/assets/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-portfolio.webp!
 {% endquote %}
 
 説明これだけ？説明ですらない感じだが、URL（競技用に準備されたサイト）にアクセスして、通常では見えないようにしてある文字列（フラグ）を見つけて回答として送信する
@@ -51,7 +51,7 @@ h3. web
 h3. crypto
 
 {% quote %}
-!/assets/img/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-twins.webp!
+!/assets/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-twins.webp!
 {% endquote %}
 
 暗号系の問題
@@ -60,7 +60,7 @@ h3. crypto
 h3. pwnable
 
 {% quote %}
-!/assets/img/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-login.webp!
+!/assets/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-login.webp!
 {% endquote %}
 
 Pwnableというカテゴリーがあるらしい
@@ -70,7 +70,7 @@ Pwnableというカテゴリーがあるらしい
 
 h3. reversing
 
-!/assets/img/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-babyrev.webp!
+!/assets/posts/2026-06-18-ctf-beginners-2026/ctf-2026-web-babyrev.webp!
 
 説明にあたるものがカテゴリーの名前だけ
 リバースエンジニアリングして答えを見つける

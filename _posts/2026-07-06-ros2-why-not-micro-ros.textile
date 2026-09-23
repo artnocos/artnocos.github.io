@@ -18,7 +18,7 @@ h2. micro-ROSとは
 "micro-ROSのアーキテクチャ":https://micro.vulcanexus.org/docs/overview/features/ を見たがどうにもよく分からない
 いろいろなサイトを見て回って自分なりに理解した結果が以下
 
-!/assets/img/posts/2026-07-06-ros2-why-not-micro-ros/micro-ROS-abstract.webp!
+!/assets/posts/2026-07-06-ros2-why-not-micro-ros/micro-ROS-abstract.webp!
 
 マイコン(MCU)はROS2がサポートするUbuntuなどの環境に比べると非力なので、ROS2が動作している環境にエージェントを置いて、マイコンにはやらせられないことをエージェントを通して実行させている
 RPC (Remote Procedure Call) のようなものだと理解した

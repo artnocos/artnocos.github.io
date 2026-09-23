@@ -3,7 +3,7 @@ title: デジタルマルチメーター（テスター） TST-KJ830 のケー�
 category: electronics
 tags: multimeter
 image:
-  path: /assets/img/posts/2026-05-02-multimeter-open/TST-KJ830-open.webp
+  path: /assets/posts/2026-05-02-multimeter-open/TST-KJ830-open.webp
   alt: TST-KJ830のケースを開けたところ
 ---
 デジタルマルチメーター(TST-KJ830)のヒューズが切れていないかを確認するため、ケースを開けようとしたら固くて大変だったので、写真を撮ってみた

@@ -3,7 +3,7 @@ title: 半加算器(Half-Adder)を作ってみた
 category: electronics
 tags: half-adder xor and breadboard
 image:
-  path: /assets/img/posts/2026-05-08-half-adder/half-adder-t4-breadboard.webp
+  path: /assets/posts/2026-05-08-half-adder/half-adder-t4-breadboard.webp
   alt: ブレッドボード上の半加算器
 ---
 電子回路入門の本を読んでいたところに、Dr.STONEのアニメで「半加算器はXORゲートとANDゲートがあれば作れるさ」というセリフを聞いたので、作ってみることにした
@@ -17,10 +17,10 @@ XORゲートとANDゲートのICで作るのが正しいのかも知れないが
 
 作った回路は以下（スイカの部分がXORで、コハクの部分がAND）
 
-!/assets/img/posts/2026-05-08-half-adder/half-adder-t4-falstad.png!
+!/assets/posts/2026-05-08-half-adder/half-adder-t4-falstad.png!
 
 回路図の作図には "Falstad":https://www.falstad.com/circuit/ を使用
-<a href="/assets/img/posts/2026-05-08-half-adder/half-adder-t4.txt" download>ファイル half-adder-t4.txt</a> を読み込ませればブラウザ上でシミュレーションできる
+<a href="/assets/posts/2026-05-08-half-adder/half-adder-t4.txt" download>ファイル half-adder-t4.txt</a> を読み込ませればブラウザ上でシミュレーションできる
 
 XORの部分は "Simple XOR logic elements on transistors - EDN":https://www.edn.com/simple-xor-logic-elements-on-transistors/ のFigure4
 ANDの部分は "NOR and NAND Gates using transistor":https://theorycircuit.com/digital-electronics/nor-and-nand-gates-using-transistor/ のNAND（を反転させた）
