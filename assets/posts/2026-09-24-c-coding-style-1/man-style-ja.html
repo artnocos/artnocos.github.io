@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    table.head, table.foot { width: 100%; }
+    td.head-rtitle, td.foot-os { text-align: right; }
+    td.head-vol { text-align: center; }
+    .Nd, .Bf, .Op { display: inline; }
+    .Pa, .Ad { font-style: italic; }
+    .Ms { font-weight: bold; }
+    .Bl-diag > dt { font-weight: bold; }
+    code.Nm, .Fl, .Cm, .Ic, code.In, .Fd, .Fn, .Cd { font-weight: bold;
+      font-family: inherit; }
+  </style>
+  <title>STYLE(9)</title>
+</head>
+<!-- This is an automatically generated file.  Do not edit.
+  -
+   Copyright (c) 1995-2005 The FreeBSD Project
+   All rights reserved.
+  
+   Redistribution and use in source and binary forms, with or without
+   modification, are permitted provided that the following conditions
+   are met:
+   1. Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+  
+   THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+   ARE DISCLAIMED.  IN NO EVENT SHALL [your name] OR CONTRIBUTORS BE LIABLE
+   FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+   DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+   OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+   HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+   LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+   OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+   SUCH DAMAGE.
+  
+   %FreeBSD: src/share/man/man9/style.9,v 1.110.2.1 2005/03/01 12:44:49 brueffer Exp %
+   $FreeBSD$
+   -->
+<body>
+<div class="head" role="doc-pageheader" aria-label="Manual header
+  line"><span class="head-ltitle">STYLE(9)</span> <span class="head-vol">FreeBSD
+  Kernel Developer's Manual</span>
+  <span class="head-rtitle">STYLE(9)</span></div>
+<main class="manual-text">
+<section class="Sh">
+<h2 class="Sh">&#x540D;&#x79F0;</h2>
+<p class="Pp"><code class="Nm">style</code> &#x2014;
+    <span class="Nd" role="doc-subtitle">&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x30BD;&#x30FC;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x30AC;&#x30A4;&#x30C9;</span></p>
+</section>
+<section class="Sh">
+<h2 class="Sh">&#x89E3;&#x8AAC;</h2>
+<p class="Pp">&#x3053;&#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306F;
+    <span class="Ux">FreeBSD</span>
+    &#x30BD;&#x30FC;&#x30B9;&#x30C4;&#x30EA;&#x30FC;&#x306E;&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x30BD;&#x30FC;&#x30B9;&#x306B;&#x597D;&#x307E;&#x3057;&#x3044;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x3092;&#x660E;&#x8A18;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;
+    &#x3053;&#x308C;&#x306F;&#x30E6;&#x30FC;&#x30B6;&#x30E9;&#x30F3;&#x30C9;&#x306E;&#x30B3;&#x30FC;&#x30C9;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x306E;&#x624B;&#x5F15;&#x304D;&#x3067;&#x3082;&#x3042;&#x308A;&#x307E;&#x3059;&#x3002;
+    &#x4F8B;&#x306B;&#x304A;&#x3044;&#x3066;&#x3001;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x898F;&#x5247;&#x306E;&#x591A;&#x304F;&#x3092;&#x6697;&#x9ED9;&#x7684;&#x306B;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;
+    <code class="Nm">style</code>
+    &#x304C;&#x3053;&#x308C;&#x3089;&#x306E;&#x4E8B;&#x4F8B;&#x306B;&#x3064;&#x3044;&#x3066;&#x8A00;&#x53CA;&#x3057;&#x3066;&#x3044;&#x306A;&#x3044;&#x3068;&#x6C7A;&#x3081;&#x4ED8;&#x3051;&#x308B;&#x524D;&#x306B;&#x3001;
+    &#x6CE8;&#x610F;&#x3057;&#x3066;&#x4F8B;&#x3092;&#x78BA;&#x8A8D;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    <code class="Nm">style</code>
+    &#x306F;&#x305D;&#x306E;&#x3088;&#x3046;&#x306A;&#x4E8B;&#x67C4;&#x306B;&#x3064;&#x3044;&#x3066;&#x306F;&#x8A18;&#x8FF0;&#x3057;&#x3066;&#x3044;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>/*
+ * FreeBSD &#x306E;&#x305F;&#x3081;&#x306E;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x30AC;&#x30A4;&#x30C9;&#x3067;&#x3059;&#x3002;
+ * CSRG &#x306E; KNF (Kernel Normal Form, &#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x6A19;&#x6E96;&#x66F8;&#x5F0F;) &#x306B;&#x57FA;&#x3065;&#x3044;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;
+ *
+ *	@(#)style	1.14 (Berkeley) 4/28/95
+ * $FreeBSD: src/share/man/man9/style.9,v 1.110.2.1 2005/03/01 12:44:49 brueffer Exp $
+ */
+
+/*
+ * &#x3068;&#x3066;&#x3082;&#x91CD;&#x8981;&#x306A; 1 &#x884C;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x3053;&#x306E;&#x3088;&#x3046;&#x306B;&#x3057;&#x307E;&#x3059;&#x3002;
+ */
+
+/* &#x6B86;&#x3069;&#x306E; 1 &#x884C;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x3053;&#x306E;&#x3088;&#x3046;&#x306B;&#x3057;&#x307E;&#x3059;&#x3002; */
+
+/*
+ * &#x8907;&#x6570;&#x884C;&#x306B;&#x308F;&#x305F;&#x308B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x3053;&#x306E;&#x3088;&#x3046;&#x306B;&#x3057;&#x307E;&#x3059;&#x3002;&#x5B9F;&#x969B;&#x306E;&#x6587;&#x7AE0;&#x3092;&#x66F8;&#x304D;&#x307E;&#x3059;&#x3002;&#x5B9F;&#x969B;&#x306E;
+ * &#x6BB5;&#x843D;&#x306B;&#x898B;&#x3048;&#x308B;&#x3088;&#x3046;&#x306B;&#x57CB;&#x3081;&#x3066;&#x3044;&#x304D;&#x307E;&#x3059;&#x3002;
+ */</pre>
+</div>
+<p class="Pp">&#x8457;&#x4F5C;&#x6A29;&#x306E;&#x30D8;&#x30C3;&#x30C0;&#x306F;&#x8907;&#x6570;&#x884C;&#x306B;&#x308F;&#x305F;&#x308B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3001;
+    &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306E;&#x6700;&#x521D;&#x306E;&#x884C;&#x306F;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x661F;
+    (&#x30A2;&#x30B9;&#x30BF;&#x30EA;&#x30B9;&#x30AF;)
+    &#x306E;&#x5F8C;&#x308D;&#x306B;&#x30C0;&#x30C3;&#x30B7;&#x30E5; (-)
+    &#x3092; &#x4ED8;&#x3051;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>/*-
+ * Copyright (c) 1984-2025 John Q. Public.  All Rights Reserved.
+ *
+ * &#x9577;&#x304F;&#x3066;&#x3001;&#x9000;&#x5C48;&#x306A;&#x30E9;&#x30A4;&#x30BB;&#x30F3;&#x30B9;&#x306F;&#x3053;&#x3053;&#x306B;&#x8A18;&#x8FF0;&#x3057;&#x307E;&#x3059;&#x304C;&#x3001;&#x7C21;&#x6F54;&#x306B;&#x3059;&#x308B;&#x305F;&#x3081;&#x306B;
+ * &#x7DE8;&#x96C6;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;
+ */</pre>
+</div>
+<p class="Pp">&#x81EA;&#x52D5;&#x30B9;&#x30AF;&#x30EA;&#x30D7;&#x30C8;&#x306F;&#x6700;&#x521D;&#x306E;&#x30AB;&#x30E9;&#x30E0;&#x304C;
+    &#x201C;<code class="Li">/*-</code>&#x201D;
+    &#x3067;&#x59CB;&#x307E;&#x308B;&#x3059;&#x3079;&#x3066;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x5BFE;&#x7167;&#x3068;&#x3057;&#x3066;&#x30C4;&#x30EA;&#x30FC;&#x304B;&#x3089;&#x30E9;&#x30A4;&#x30BB;&#x30F3;&#x30B9;&#x60C5;&#x5831;&#x3092;&#x96C6;&#x3081;&#x307E;&#x3059;&#x3002;
+    &#x5229;&#x7528;&#x8005;&#x304C;&#x30E9;&#x30A4;&#x30BB;&#x30F3;&#x30B9;&#x307E;&#x305F;&#x306F;&#x8457;&#x4F5C;&#x6A29;&#x8868;&#x793A;&#x3067;&#x3082;&#x306A;&#x3044;&#x6700;&#x521D;&#x306E;&#x30AB;&#x30E9;&#x30E0;&#x3067;&#x59CB;&#x307E;&#x308B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;
+    &#x6700;&#x521D;&#x306E;&#x30AB;&#x30E9;&#x30E0;&#x304B;&#x3089;&#x59CB;&#x307E;&#x308B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3067;&#x30E9;&#x30A4;&#x30BB;&#x30F3;&#x30B9;&#x3084;&#x8457;&#x4F5C;&#x6A29;&#x8868;&#x793A;&#x3067;&#x306A;&#x3044;&#x3082;&#x306E;&#x3092;
+    <a class="Xr" aria-label="indent, section 1">indent(1)</a>
+    &#x306B;&#x518D;&#x6574;&#x5F62;&#x3055;&#x305B;&#x305F;&#x304F;&#x306A;&#x3044;&#x5834;&#x5408;&#x306F;&#x3001;
+    &#x305D;&#x308C;&#x3089;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306E;&#x30C0;&#x30C3;&#x30B7;&#x30E5;&#x3092;&#x661F;&#x306B;&#x5909;&#x3048;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x6700;&#x521D;&#x306E;&#x30AB;&#x30E9;&#x30E0;&#x4EE5;&#x5916;&#x304B;&#x3089;&#x59CB;&#x307E;&#x308B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;
+    &#x6C7A;&#x3057;&#x3066;&#x30E9;&#x30A4;&#x30BB;&#x30F3;&#x30B9;&#x58F0;&#x660E;&#x3068;&#x306F;&#x307F;&#x306A;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp">&#x8457;&#x4F5C;&#x6A29;&#x30D8;&#x30C3;&#x30C0;&#x306E;&#x5F8C;&#x306B;&#x306F;&#x7A7A;&#x884C;&#x3092;
+    1
+    &#x884C;&#x5165;&#x308C;&#x3001;&#x30BD;&#x30FC;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306B;&#x306F;
+    <var class="Va">rcsid</var> &#x3092;&#x4ED8;&#x3051;&#x307E;&#x3059;&#x3002;
+    &#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x7BA1;&#x7406;&#x30B7;&#x30B9;&#x30C6;&#x30E0;&#x306E;
+    ID
+    &#x30BF;&#x30B0;&#x306F;&#x3001;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x4E2D;&#x306B;
+    1 &#x500B;&#x306E;&#x307F;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;
+    (&#x3053;&#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3067;&#x306F;&#x9055;&#x3044;&#x307E;&#x3059;&#x304C;)&#x3002;
+    C/C++
+    &#x30BD;&#x30FC;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x4EE5;&#x5916;&#x306F;&#x3053;&#x306E;&#x4F8B;&#x306B;&#x5F93;&#x3044;&#x307E;&#x3059;&#x304C;&#x3001;
+    C/C++
+    &#x30BD;&#x30FC;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306F;&#x4EE5;&#x964D;&#x306E;&#x4F8B;&#x306B;&#x5F93;&#x3044;&#x307E;&#x3059;&#x3002;
+    &#x5916;&#x90E8;&#x304B;&#x3089;&#x5165;&#x624B;&#x3057;&#x305F;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;
+    &#x3059;&#x3079;&#x3066;&#x306E; VCS
+    (&#x30D0;&#x30FC;&#x30B8;&#x30E7;&#x30F3;&#x7BA1;&#x7406;&#x30B7;&#x30B9;&#x30C6;&#x30E0;)
+    &#x30EA;&#x30D3;&#x30B8;&#x30E7;&#x30F3;&#x8B58;&#x5225;&#x5B50;&#x306F;&#x3001;
+    &#x5B58;&#x5728;&#x3059;&#x308C;&#x3070;&#x7DAD;&#x6301;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x3053;&#x308C;&#x306B;&#x306F;&#x3001;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x6765;&#x6B74;&#x3092;&#x793A;&#x3059;&#x8907;&#x6570;&#x306E;
+    ID &#x3082;&#x542B;&#x307F;&#x307E;&#x3059;&#x3002;
+    &#x4E00;&#x822C;&#x7684;&#x306B;&#x3001;&#x5916;&#x6765;&#x306E; ID
+    &#x307E;&#x305F;&#x306F;&#x305D;&#x306E;&#x4E0B;&#x90E8;&#x69CB;&#x9020;&#x306F;&#x7DE8;&#x96C6;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x3055;&#x3082;&#x306A;&#x3051;&#x308C;&#x3070;
+    (&#x201C;<code class="Li">#if defined(LIBC_SCCS)</code>&#x201D;
+    &#x306E;&#x3088;&#x3046;&#x306B;)
+    &#x56F2;&#x307E;&#x308C;&#x3066;&#x3044;&#x306A;&#x3044;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x5168;&#x3066;&#x306E;&#x4E92;&#x63DB;&#x6027;&#x306E;&#x306A;&#x3044;&#x5C0F;&#x7247;&#x3092;&#x96A0;&#x3059;&#x305F;&#x3081;&#x3001;&#x304A;&#x3088;&#x3073;
+    &#x305D;&#x306E; ID
+    &#x3092;&#x30AA;&#x30D6;&#x30B8;&#x30A7;&#x30AF;&#x30C8;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x304B;&#x3089;&#x8FFD;&#x3044;&#x51FA;&#x3057;&#x3066;&#x304A;&#x304F;&#x305F;&#x3081;&#x306B;&#x3001;&#x4E21;&#x65B9;&#x3092;
+    &#x201C;<code class="Li">#if 0 ... #endif</code>&#x201D;
+    &#x306E;&#x4E2D;&#x306B;&#x56F2;&#x307F;&#x307E;&#x3059;&#x3002;
+    &#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x540D;&#x524D;&#x304C;&#x5909;&#x66F4;&#x3055;&#x308C;&#x305F;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x5916;&#x6765;&#x306E;
+    VCS ID &#x306E;&#x524D;&#x306B; &#x201C;<code class="Li">From:
+    </code>&#x201D;
+    &#x306E;&#x307F;&#x3092;&#x8FFD;&#x52A0;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#if 0
+#ifndef lint
+static char sccsid[] = &quot;@(#)style      1.14 (Berkeley) 4/28/95&quot;;
+#endif /* not lint */
+#endif
+
+#include &lt;sys/cdefs.h&gt;
+__FBSDID(&quot;$FreeBSD: src/share/man/man9/style.9,v 1.110.2.1 2005/03/01 12:44:49 brueffer Exp $&quot;);</pre>
+</div>
+<p class="Pp">&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x524D;&#x306B;&#x3001;&#x7A7A;&#x884C;&#x3092;
+    1 &#x884C;&#x4ED8;&#x3051;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x306E;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;
+    (&#x3059;&#x306A;&#x308F;&#x3061;&#x3001; <span class="Pa">sys/*.h</span>)
+    &#x304C;&#x521D;&#x3081;&#x306B;&#x6765;&#x307E;&#x3059;&#x3002;
+    &#x901A;&#x5E38;&#x3001;
+    <code class="In">&lt;<a class="In">sys/types.h</a>&gt;</code>
+    &#x307E;&#x305F;&#x306F;
+    <code class="In">&lt;<a class="In">sys/param.h</a>&gt;</code>
+    &#x306E;&#x3069;&#x3061;&#x3089;&#x304B;&#x304C;&#x5FC5;&#x8981;&#x3067;&#x3059;&#x304C;&#x3001;
+    &#x4E21;&#x65B9;&#x306F;&#x5FC5;&#x8981;&#x306A;&#x3044;&#x3067;&#x3057;&#x3087;&#x3046;&#x3002;
+    <code class="In">&lt;<a class="In">sys/types.h</a>&gt;</code> &#x306F;
+    <code class="In">&lt;<a class="In">sys/cdefs.h</a>&gt;</code>
+    &#x3092;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x3057;&#x3066;&#x304A;&#x308A;&#x3001;
+    &#x4F9D;&#x5B58;&#x95A2;&#x4FC2;&#x306F;&#x554F;&#x984C;&#x3042;&#x308A;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;sys/types.h&gt;		/* &#x5C71;&#x62EC;&#x5F27;&#x306B;&#x3088;&#x308B;&#x975E;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9; */</pre>
+</div>
+<p class="Pp">&#x30CD;&#x30C3;&#x30C8;&#x30EF;&#x30FC;&#x30AF;&#x30D7;&#x30ED;&#x30B0;&#x30E9;&#x30E0;&#x3067;&#x3042;&#x308B;&#x5834;&#x5408;&#x306F;&#x3001;
+    &#x6B21;&#x306B;&#x30CD;&#x30C3;&#x30C8;&#x30EF;&#x30FC;&#x30AF;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3092;&#x7F6E;&#x304D;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;net/if.h&gt;
+#include &lt;net/if_dl.h&gt;
+#include &lt;net/route.h&gt;
+#include &lt;netinet/in.h&gt;
+#include &lt;protocols/rwhod.h&gt;</pre>
+</div>
+<p class="Pp">&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x7528;&#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306B;&#x306F;&#x3001;
+    <span class="Pa">/usr/include</span>
+    &#x4E2D;&#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x306A;&#x3044;&#x3067;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+<p class="Pp">&#x305D;&#x308C;&#x304B;&#x3089;&#x7A7A;&#x884C;&#x3092;&#x7F6E;&#x304D;&#x3001;
+    <span class="Pa">/usr/include</span>
+    &#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3092;&#x7D9A;&#x3051;&#x307E;&#x3059;&#x3002;
+    <span class="Pa">/usr/include</span>
+    &#x306E;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306F;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306B;&#x30BD;&#x30FC;&#x30C8;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;stdio.h&gt;</pre>
+</div>
+<p class="Pp">&#x30B0;&#x30ED;&#x30FC;&#x30D0;&#x30EB;&#x306A;&#x30D1;&#x30B9;&#x540D;&#x306F;
+    <code class="In">&lt;<a class="In">paths.h</a>&gt;</code>
+    &#x3067;&#x5B9A;&#x7FA9;&#x3055;&#x308C;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;
+    &#x30D7;&#x30ED;&#x30B0;&#x30E9;&#x30E0;&#x306B;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x306A;&#x30D1;&#x30B9;&#x540D;&#x306F;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x30C7;&#x30A3;&#x30EC;&#x30AF;&#x30C8;&#x30EA;&#x306E;
+    &quot;<span class="Pa">pathnames.h</span>&quot;
+    &#x306B;&#x5165;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;paths.h&gt;</pre>
+</div>
+<p class="Pp">&#x305D;&#x308C;&#x304B;&#x3089;&#x3001;&#x7A7A;&#x884C;&#x304C;&#x3042;&#x3063;&#x3066;&#x3001;&#x30E6;&#x30FC;&#x30B6;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x304C;&#x6765;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &quot;pathnames.h&quot;		/* &quot; &quot; &#x306B;&#x3088;&#x308B;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9; */</pre>
+</div>
+<p class="Pp">&#x30A2;&#x30D7;&#x30EA;&#x30B1;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x30A4;&#x30F3;&#x30BF;&#x30D5;&#x30A7;&#x30FC;&#x30B9;&#x3092;&#x5B9F;&#x88C5;&#x3057;&#x3066;&#x3044;&#x308B;&#x5834;&#x5408;&#x3092;&#x9664;&#x304D;&#x3001;
+    &#x5B9F;&#x88C5;&#x306E;&#x540D;&#x524D;&#x7A7A;&#x9593;&#x3067;
+    <code class="Ic">#define</code>
+    &#x3057;&#x305F;&#x308A;&#x540D;&#x524D;&#x3092;&#x5B9A;&#x7FA9;&#x3057;&#x305F;&#x308A;&#x3057;&#x3066;&#x306F;&#x3044;&#x3051;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp">&#x201C;&#x5B89;&#x5168;&#x3067;&#x306A;&#x3044;&#x201D;
+    &#x30DE;&#x30AF;&#x30ED;
+    (&#x526F;&#x4F5C;&#x7528;&#x3092;&#x6301;&#x3063;&#x3066;&#x3044;&#x308B;&#x3082;&#x306E;)
+    &#x306E;&#x540D;&#x524D;&#x3068;&#x3001;
+    &#x660E;&#x3089;&#x304B;&#x306A;&#x5B9A;&#x6570;&#x306E;&#x30DE;&#x30AF;&#x30ED;&#x306E;&#x540D;&#x524D;&#x306F;&#x3059;&#x3079;&#x3066;&#x5927;&#x6587;&#x5B57;&#x3067;&#x3059;&#x3002;
+    &#x5F0F;&#x306E;&#x3088;&#x3046;&#x306B;&#x5C55;&#x958B;&#x3055;&#x308C;&#x308B;&#x30DE;&#x30AF;&#x30ED;&#x306F;&#x3001;&#x5358;&#x4E00;&#x306E;&#x30C8;&#x30FC;&#x30AF;&#x30F3;&#x306B;&#x3059;&#x308B;&#x304B;&#x5916;&#x5074;&#x306B;&#x62EC;&#x5F27;&#x3092;&#x3064;&#x3051;&#x307E;&#x3059;&#x3002;
+    <code class="Ic">#define</code>
+    &#x3068;&#x30DE;&#x30AF;&#x30ED;&#x540D;&#x306E;&#x9593;&#x306B;&#x30BF;&#x30D6;&#x6587;&#x5B57;&#x3092;
+    1 &#x500B;&#x5165;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x30DE;&#x30AF;&#x30ED;&#x304C;&#x3042;&#x308B;&#x95A2;&#x6570;&#x306E;&#x30A4;&#x30F3;&#x30E9;&#x30A4;&#x30F3;&#x5C55;&#x958B;&#x3067;&#x3042;&#x308B;&#x5834;&#x5408;&#x306F;&#x3001;
+    &#x95A2;&#x6570;&#x540D;&#x306F;&#x5168;&#x3066;&#x5C0F;&#x6587;&#x5B57;&#x3067;&#x3001;&#x30DE;&#x30AF;&#x30ED;&#x306F;&#x3059;&#x3079;&#x3066;&#x5927;&#x6587;&#x5B57;&#x306E;&#x540C;&#x3058;&#x540D;&#x524D;&#x3092;&#x6301;&#x3061;&#x307E;&#x3059;&#x3002;
+    &#x30D0;&#x30C3;&#x30AF;&#x30B9;&#x30E9;&#x30C3;&#x30B7;&#x30E5;&#x306F;&#x53F3;&#x63C3;&#x3048;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x3053;&#x3046;&#x3059;&#x308B;&#x3068;&#x8AAD;&#x307F;&#x3084;&#x3059;&#x304F;&#x306A;&#x308A;&#x307E;&#x3059;&#x3002;
+    &#x30DE;&#x30AF;&#x30ED;&#x304C;&#x8907;&#x5408;&#x6587;&#x3092;&#x30AB;&#x30D7;&#x30BB;&#x30EB;&#x5316;&#x3059;&#x308B;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x305D;&#x308C;&#x3092;
+    <code class="Ic">do</code>
+    &#x30EB;&#x30FC;&#x30D7;&#x3067;&#x56F2;&#x307F;&#x307E;&#x3059;&#x3002;
+    &#x3053;&#x308C;&#x306B;&#x3088;&#x308A;&#x3001; <code class="Ic">if</code>
+    &#x6587;&#x3067;&#x5B89;&#x5168;&#x306B;&#x4F7F;&#x7528;&#x3067;&#x304D;&#x307E;&#x3059;&#x3002;
+    &#x6700;&#x5F8C;&#x306E;&#x6587;&#x306E;&#x7D42;&#x7AEF;&#x306E;&#x30BB;&#x30DF;&#x30B3;&#x30ED;&#x30F3;&#x306F;&#x3001;
+    &#x30DE;&#x30AF;&#x30ED;&#x3067;&#x306F;&#x306A;&#x304F;&#x30DE;&#x30AF;&#x30ED;&#x306E;&#x5B9F;&#x65BD;&#x6642;&#x306B;&#x4ED8;&#x3051;&#x3089;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x3053;&#x308C;&#x306B;&#x3088;&#x308A;&#x3001;&#x6E05;&#x66F8;&#x5668;&#x3084;&#x30A8;&#x30C7;&#x30A3;&#x30BF;&#x3067;&#x6587;&#x6CD5;&#x89E3;&#x6790;&#x3057;&#x3084;&#x3059;&#x304F;&#x306A;&#x308A;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#define	MACRO(x, y) do {						\
+	variable = (x) + (y);						\
+	(y) += 2;							\
+} while (0)</pre>
+</div>
+<p class="Pp">&#x30B3;&#x30FC;&#x30C9;&#x304C; <code class="Ic">#ifdef</code>
+    &#x307E;&#x305F;&#x306F; <code class="Ic">#if</code>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x3067;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30EB;&#x3055;&#x308C;&#x308B;&#x3068;&#x304D;&#x306B;&#x306F;&#x3001;
+    &#x3069;&#x3053;&#x3067;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x3067;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30EB;&#x3055;&#x308C;&#x308B;&#x30B3;&#x30FC;&#x30C9;&#x304C;&#x7D42;&#x4E86;&#x3059;&#x308B;&#x306E;&#x304B;&#x3092;
+    &#x8AAD;&#x3080;&#x4EBA;&#x304C;&#x5BB9;&#x6613;&#x306B;&#x8B58;&#x5225;&#x3059;&#x308B;&#x3053;&#x3068;&#x304C;&#x53EF;&#x80FD;&#x306B;&#x3059;&#x308B;&#x305F;&#x3081;&#x306B;&#x3001;&#x305D;&#x308C;&#x306B;&#x7D9A;&#x304F;&#x9069;&#x5408;&#x3059;&#x308B;
+    <code class="Ic">#endif</code> &#x307E;&#x305F;&#x306F;
+    <code class="Ic">#else</code>
+    &#x306B;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x8FFD;&#x52A0;&#x3057;&#x3066;&#x3082;&#x69CB;&#x3044;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x3053;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;
+    (&#x4E3B;&#x89B3;&#x7684;&#x306B;)
+    &#x9577;&#x3044;&#x90E8;&#x5206;&#x3001;20
+    &#x884C;&#x4EE5;&#x4E0A;&#x306E;&#x90E8;&#x5206;&#x3001;&#x307E;&#x305F;&#x306F;&#x30CD;&#x30B9;&#x30C8;&#x3055;&#x308C;&#x305F;
+    <code class="Ic">#ifdef</code>
+    &#x306E;&#x9023;&#x7D9A;&#x304C;&#x8AAD;&#x3080;&#x4EBA;&#x3092;&#x6DF7;&#x4E71;&#x3055;&#x305B;&#x308B;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x3068;&#x304D;&#x3001;&#x306B;&#x306E;&#x307F;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x305F;&#x3068;&#x3048;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30EB;&#x3055;&#x308C;&#x306A;&#x3044;&#x9818;&#x57DF;&#x304C;&#x5C0F;&#x3055;&#x304F;&#x306A;&#x308B;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x3067;&#x3082;&#x3001;
+    <a class="Xr" aria-label="lint, section 1">lint(1)</a>
+    &#x306E;&#x76EE;&#x7684;&#x306E;&#x305F;&#x3081;&#x306B;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x3067;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30EB;&#x3055;&#x308C;&#x306A;&#x3044;&#x500B;&#x6240;&#x306E;&#x305F;&#x3081;&#x306B;&#x3001;
+    &#x4F8B;&#x5916;&#x304C;&#x4F5C;&#x3089;&#x308C;&#x3066;&#x3082;&#x69CB;&#x3044;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x305D;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;
+    <code class="Ic">#endif</code> &#x307E;&#x305F;&#x306F;
+    <code class="Ic">#else</code> &#x304B;&#x3089; 1
+    &#x3064;&#x306E;&#x7A7A;&#x767D;&#x306B;&#x3088;&#x3063;&#x3066;&#x5206;&#x96E2;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x77ED;&#x3044;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x3067;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30EB;&#x3055;&#x308C;&#x308B;&#x90E8;&#x5206;&#x306E;&#x305F;&#x3081;&#x306B;&#x3001;
+    &#x7D42;&#x308F;&#x308A;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3079;&#x304D;&#x3067;&#x306F;&#x3042;&#x308A;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp"><code class="Ic">#endif</code>
+    &#x306E;&#x305F;&#x3081;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x5BFE;&#x5FDC;&#x3059;&#x308B;
+    <code class="Ic">#if</code> &#x307E;&#x305F;&#x306F;
+    <code class="Ic">#ifdef</code>
+    &#x3067;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x8868;&#x73FE;&#x306B;&#x5408;&#x308F;&#x305B;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    <code class="Ic">#else</code> &#x304A;&#x3088;&#x3073;
+    <code class="Ic">#elif</code>
+    &#x306E;&#x305F;&#x3081;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x5148;&#x884C;&#x3059;&#x308B;
+    <code class="Ic">#if</code>
+    &#x304A;&#x3088;&#x3073;/&#x307E;&#x305F;&#x306F;
+    <code class="Ic">#elif</code>
+    &#x6587;&#x306B;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x8868;&#x73FE;&#x306E;&#x53CD;&#x5BFE;&#x306B;&#x5408;&#x308F;&#x305B;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306E;&#x4E2D;&#x3067;&#x306F;&#x3001;&#x88DC;&#x52A9;&#x8868;&#x73FE;
+    &#x201C;<code class="Li">defined(FOO)</code>&#x201D; &#x306F;
+    &#x201C;<code class="Li">FOO</code>&#x201D;
+    &#x3068;&#x7701;&#x7565;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306E;&#x76EE;&#x7684;&#x306E;&#x305F;&#x3081;&#x306B;&#x306F;&#x3001;
+    &#x201C;<code class="Ic">#ifndef</code> <code class="Li">FOO</code>&#x201D;
+    &#x306F; &#x201C;<code class="Ic">#if</code>
+    <code class="Li">!defined(FOO)</code>&#x201D;
+    &#x3068;&#x307F;&#x306A;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#ifdef KTRACE
+#include &lt;sys/ktrace.h&gt;
+#endif
+
+#ifdef COMPAT_43
+/* &#x5927;&#x304D;&#x306A;&#x90E8;&#x5206;&#x304C;&#x3001;&#x307E;&#x305F;&#x306F;&#x4ED6;&#x306E;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x306E;&#x30B3;&#x30FC;&#x30C9;&#x304C;&#x3053;&#x3053;&#x306B; */
+#else /* !COMPAT_43 */
+/* &#x307E;&#x305F;&#x306F;&#x3053;&#x3053;&#x306B; */
+#endif /* COMPAT_43 */
+
+#ifndef COMPAT_43
+/* &#x66F4;&#x306B;&#x5225;&#x306E;&#x5927;&#x304D;&#x306A;&#x90E8;&#x5206;&#x304C;&#x3001;&#x307E;&#x305F;&#x306F;&#x4ED6;&#x306E;&#x6761;&#x4EF6;&#x4ED8;&#x304D;&#x306E;&#x30B3;&#x30FC;&#x30C9;&#x304C;&#x3053;&#x3053;&#x306B; */
+#else /* COMPAT_43 */
+/* &#x307E;&#x305F;&#x306F;&#x3053;&#x3053;&#x306B; */
+#endif /* !COMPAT_43 */</pre>
+</div>
+<p class="Pp">&#x3053;&#x306E;&#x30D7;&#x30ED;&#x30B8;&#x30A7;&#x30AF;&#x30C8;&#x306F;&#x3001;
+    <var class="Vt">u_intXX_t</var> &#x5F62;&#x5F0F;&#x306E;&#x53E4;&#x3044;
+    <span class="Ux">BSD</span>
+    &#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x306E;&#x6574;&#x6570;&#x8B58;&#x5225;&#x5B50;&#x3088;&#x308A;&#x3082;&#x3080;&#x3057;&#x308D;&#x3001;
+    <var class="Vt">uintXX_t</var> &#x5F62;&#x5F0F;&#x306E;
+    <span class="St">ISO/IEC 9899:1999 (&#x201C;ISO&#x00A0;C99&#x201D;)</span>
+    &#x306E;&#x7B26;&#x53F7;&#x306A;&#x3057;&#x6574;&#x6570;&#x8B58;&#x5225;&#x5B50;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3088;&#x3046;&#x306B;&#x3001;&#x5F90;&#x3005;&#x306B;&#x79FB;&#x884C;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;
+    &#x65B0;&#x3057;&#x3044;&#x30B3;&#x30FC;&#x30C9;&#x306F;&#x5F8C;&#x8005;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3079;&#x304D;&#x3067;&#x3001;&#x3055;&#x3089;&#x306B;&#x305D;&#x306E;&#x9818;&#x57DF;&#x306E;&#x4ED6;&#x306E;&#x4E3B;&#x8981;&#x306A;&#x4F5C;&#x696D;&#x304C;&#x5B8C;&#x4E86;&#x3057;&#x3001;
+    &#x53E4;&#x3044; <span class="Ux">BSD</span>
+    &#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x3092;&#x597D;&#x3080;&#x305F;&#x3081;&#x306E;&#x512A;&#x5148;&#x3059;&#x308B;&#x7406;&#x7531;&#x304C;&#x306A;&#x3044;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x53E4;&#x3044;&#x30B3;&#x30FC;&#x30C9;&#x306F;
+    &#x65B0;&#x3057;&#x3044;&#x5F62;&#x5F0F;&#x306B;&#x5909;&#x63DB;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x7A7A;&#x767D;&#x6587;&#x5B57;&#x306E;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x3068;&#x540C;&#x69D8;&#x306B;&#x3001;
+    <var class="Vt">uintXX_t</var>
+    &#x306E;&#x307F;&#x306E;&#x30B3;&#x30DF;&#x30C3;&#x30C8;&#x3092;&#x3059;&#x308B;&#x3088;&#x3046;&#x3001;&#x8003;&#x616E;&#x3059;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x5217;&#x6319;&#x5024;&#x306F;&#x5168;&#x3066;&#x5927;&#x6587;&#x5B57;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>enum enumtype { ONE, TWO } et;</pre>
+</div>
+<p class="Pp">&#x5BA3;&#x8A00;&#x306E;&#x4E2D;&#x3067;&#x306F;&#x3001;&#x578B;&#x306B;&#x95A2;&#x4FC2;&#x4ED8;&#x3051;&#x3089;&#x308C;&#x305F;&#x30C8;&#x30FC;&#x30AF;&#x30F3;&#x3092;&#x9664;&#x3044;&#x3066;&#x3001;
+    &#x30A2;&#x30B9;&#x30BF;&#x30EA;&#x30B9;&#x30AF;&#x3068;&#x96A3;&#x63A5;&#x3057;&#x305F;&#x30C8;&#x30FC;&#x30AF;&#x30F3;&#x306E;&#x9593;&#x306B;&#x306F;&#x7A7A;&#x767D;&#x6587;&#x5B57;&#x3092;&#x7F6E;&#x304D;&#x307E;&#x305B;&#x3093;&#x3002;
+    (&#x3053;&#x308C;&#x3089;&#x306E;&#x8B58;&#x5225;&#x5B50;&#x306F;&#x57FA;&#x672C;&#x306E;&#x578B;&#x306E;&#x540D;&#x524D;&#x3001;&#x578B;&#x306E;&#x4FEE;&#x98FE;&#x8A9E;&#x53E5;&#x3001;&#x304A;&#x3088;&#x3073;&#x4ECA;&#x5BA3;&#x8A00;&#x3055;&#x308C;&#x3088;&#x3046;&#x3068;&#x3057;&#x3066;&#x3044;&#x308B;
+    &#x3082;&#x306E;&#x4EE5;&#x5916;&#x306E; <code class="Ic">typedef</code>
+    &#x540D;&#x3067;&#x3059;&#x3002;)
+    &#x3053;&#x308C;&#x3089;&#x306E;&#x8B58;&#x5225;&#x5B50;&#x306F;&#x30A2;&#x30B9;&#x30BF;&#x30EA;&#x30B9;&#x30AF;&#x304B;&#x3089;
+    1
+    &#x3064;&#x306E;&#x7A7A;&#x767D;&#x3067;&#x5206;&#x96E2;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x69CB;&#x9020;&#x4F53;&#x306E;&#x4E2D;&#x3067;&#x5909;&#x6570;&#x3092;&#x5BA3;&#x8A00;&#x3059;&#x308B;&#x6642;&#x306B;&#x306F;&#x3001;
+    &#x4F7F;&#x7528;&#x9806;&#x3001;&#x30B5;&#x30A4;&#x30BA;&#x9806;
+    (&#x5927;&#x304D;&#x3044;&#x3082;&#x306E;&#x304B;&#x3089;&#x5C0F;&#x3055;&#x306A;&#x3082;&#x306E;&#x3078;)&#x3001;
+    &#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306B;&#x30BD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x5BA3;&#x8A00;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x6700;&#x521D;&#x306E;&#x533A;&#x5206;&#x306F;&#x901A;&#x5E38;&#x9069;&#x7528;&#x3057;&#x307E;&#x305B;&#x3093;&#x304C;&#x3001;&#x4F8B;&#x5916;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#x3002;
+    &#x5404;&#x5BA3;&#x8A00;&#x306F;&#x3001;&#x305D;&#x308C;&#x305E;&#x308C;&#x72EC;&#x7ACB;&#x3057;&#x305F;&#x884C;&#x306B;&#x3066;&#x884C;&#x3044;&#x307E;&#x3059;&#x3002;
+    &#x69CB;&#x9020;&#x4F53;&#x306E;&#x540D;&#x524D;&#x306E;&#x4F4D;&#x7F6E;&#x3092;&#x3001;&#x3042;&#x306A;&#x305F;&#x306E;&#x5224;&#x65AD;&#x3067;&#x8AAD;&#x307F;&#x6613;&#x3044;&#x3088;&#x3046;&#x306B;&#x3001;
+    &#x30BF;&#x30D6; 1 &#x500B;&#x307E;&#x305F;&#x306F; 2
+    &#x500B;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x63C3;&#x3048;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x5C11;&#x306A;&#x304F;&#x3068;&#x3082; 90%
+    &#x306E;&#x30E1;&#x30F3;&#x30D0;&#x306E;&#x540D;&#x524D;&#x3092;&#x63C3;&#x3048;&#x308B;&#x306E;&#x306B;&#x5341;&#x5206;&#x306A;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;
+    1
+    &#x3064;&#x3060;&#x3051;&#x306E;&#x30BF;&#x30D6;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x975E;&#x5E38;&#x306B;&#x9577;&#x3044;&#x578B;&#x306E;&#x5F8C;&#x306E;&#x540D;&#x524D;&#x306F;&#x3001;&#x5358;&#x4E00;&#x306E;&#x7A7A;&#x767D;&#x3067;&#x533A;&#x5207;&#x3089;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x91CD;&#x8981;&#x306A;&#x69CB;&#x9020;&#x4F53;&#x306F;&#x3001;&#x305D;&#x308C;&#x304C;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x5148;&#x982D;&#x3067;&#x5BA3;&#x8A00;&#x3055;&#x308C;&#x308B;&#x304B;&#x3001;
+    &#x8907;&#x6570;&#x306E;&#x30BD;&#x30FC;&#x30B9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3067;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x5834;&#x5408;&#x306F;&#x5225;&#x306E;&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3067;&#x5BA3;&#x8A00;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x69CB;&#x9020;&#x4F53;&#x304C;&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x3067;&#x5BA3;&#x8A00;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;
+    &#x305D;&#x308C;&#x3089;&#x69CB;&#x9020;&#x4F53;&#x306E;&#x4F7F;&#x7528;&#x306F;&#x3001;&#x5BA3;&#x8A00;&#x3068;&#x306F;&#x5206;&#x3051;&#x3089;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3001;&#x304B;&#x3064;
+    <code class="Ic">extern</code>
+    &#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>struct foo {
+	struct foo	*next;		/* &#x4F7F;&#x7528;&#x4E2D;&#x306E; foo &#x306E;&#x30EA;&#x30B9;&#x30C8; */
+	struct mumble	amumble;	/* mumble &#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8; */
+	int		bar;		/* &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x63C3;&#x3048;&#x307E;&#x3059; */
+	struct verylongtypename *baz;	/* &#x30BF;&#x30D6; 2 &#x500B;&#x306B;&#x306F;&#x53CE;&#x307E;&#x308A;&#x307E;&#x305B;&#x3093; */
+};
+struct foo *foohead;			/* &#x30B0;&#x30ED;&#x30FC;&#x30D0;&#x30EB;&#x306A; foo &#x30EA;&#x30B9;&#x30C8;&#x306E;&#x5148;&#x982D; */</pre>
+</div>
+<p class="Pp">&#x53EF;&#x80FD;&#x306A;&#x6642;&#x306B;&#x306F;&#x5FC5;&#x305A;&#x3001;&#x3042;&#x306A;&#x305F;&#x81EA;&#x8EAB;&#x3067;&#x30EA;&#x30B9;&#x30C8;&#x3092;&#x64CD;&#x4F5C;&#x3059;&#x308B;&#x306E;&#x3067;&#x306F;&#x306A;&#x304F;&#x3001;
+    <a class="Xr" aria-label="queue, section 3">queue(3)</a>
+    &#x30DE;&#x30AF;&#x30ED;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x5F93;&#x3063;&#x3066;&#x3001;&#x524D;&#x306E;&#x4F8B;&#x3092;&#x3088;&#x308A;&#x826F;&#x304F;&#x66F8;&#x304F;&#x3068;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x306A;&#x308A;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;sys/queue.h&gt;
+
+struct foo {
+	LIST_ENTRY(foo)	link;		/* foo &#x30EA;&#x30B9;&#x30C8;&#x306B;&#x30AD;&#x30E5;&#x30FC;&#x30DE;&#x30AF;&#x30ED;&#x3092;&#x4F7F;&#x7528; */
+	struct mumble	amumble;	/* mumble &#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8; */
+	int		bar;		/* &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x63C3;&#x3048;&#x307E;&#x3059; */
+	struct verylongtypename *baz;	/* &#x30BF;&#x30D6; 2 &#x500B;&#x306B;&#x306F;&#x53CE;&#x307E;&#x308A;&#x307E;&#x305B;&#x3093; */
+};
+LIST_HEAD(, foo) foohead;		/* &#x30B0;&#x30ED;&#x30FC;&#x30D0;&#x30EB;&#x306A; foo &#x30EA;&#x30B9;&#x30C8;&#x306E;&#x5148;&#x982D; */</pre>
+</div>
+<p class="Pp">&#x69CB;&#x9020;&#x4F53;&#x306E;&#x578B;&#x306B; typedef
+    &#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x4E8B;&#x306F;&#x907F;&#x3051;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    typedef
+    &#x306F;&#x3001;&#x305D;&#x306E;&#x4E0B;&#x4F4D;&#x306B;&#x3042;&#x308B;&#x578B;&#x3092;&#x9069;&#x5207;&#x306B;&#x96A0;&#x3055;&#x306A;&#x3044;&#x306E;&#x3067;&#x3001;&#x554F;&#x984C;&#x3068;&#x306A;&#x308A;&#x5F97;&#x307E;&#x3059;&#x3002;
+    &#x4F8B;&#x3048;&#x3070;&#x3001;typedef
+    &#x304C;&#x69CB;&#x9020;&#x4F53;&#x305D;&#x306E;&#x3082;&#x306E;&#x3067;&#x3042;&#x308B;&#x306E;&#x304B;&#x3001;&#x69CB;&#x9020;&#x4F53;&#x3078;&#x306E;&#x30DD;&#x30A4;&#x30F3;&#x30BF;&#x3067;&#x3042;&#x308B;&#x306E;&#x304B;&#x3001;
+    &#x3042;&#x306A;&#x305F;&#x304C;&#x77E5;&#x308B;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#x3002;
+    &#x66F4;&#x306B;&#x3001;typedef &#x306F;&#x6B63;&#x78BA;&#x306B; 1
+    &#x5EA6;&#x3060;&#x3051;&#x5BA3;&#x8A00;&#x3057;&#x306A;&#x3051;&#x308C;&#x3070;&#x306A;&#x308A;&#x307E;&#x305B;&#x3093;&#x304C;&#x3001;
+    &#x4E0D;&#x5B8C;&#x5168;&#x306A;&#x69CB;&#x9020;&#x4F53;&#x578B;&#x306F;&#x5FC5;&#x8981;&#x306A;&#x56DE;&#x6570;&#x3060;&#x3051;&#x5BA3;&#x8A00;&#x53EF;&#x80FD;&#x3067;&#x3059;&#x3002;
+    typedef
+    &#x306F;&#x30B9;&#x30BF;&#x30F3;&#x30C9;&#x30A2;&#x30ED;&#x30F3;&#x306A;&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x4E2D;&#x3067;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x3053;&#x3068;&#x304C;&#x56F0;&#x96E3;&#x3067;&#x3059;&#x3002;
+    typedef
+    &#x3092;&#x5B9A;&#x7FA9;&#x3059;&#x308B;&#x30D8;&#x30C3;&#x30C0;&#x306F;&#x3001;&#x3053;&#x306E;
+    typedef
+    &#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x30D8;&#x30C3;&#x30C0;&#x306E;&#x524D;&#x306B;
+    &#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x3059;&#x308B;&#x304B;&#x3001;&#x3053;&#x306E;
+    typedef
+    &#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x30D8;&#x30C3;&#x30C0;&#x306B;&#x3088;&#x3063;&#x3066;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;
+    &#x3059;&#x308B;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;
+    (&#x3053;&#x308C;&#x306F;&#x540D;&#x524D;&#x7A7A;&#x9593;&#x306E;&#x6C5A;&#x67D3;&#x3068;&#x306A;&#x308A;&#x307E;&#x3059;)&#x3002;
+    &#x3055;&#x3082;&#x306A;&#x3051;&#x308C;&#x3070;&#x3001;typedef
+    &#x3092;&#x5F97;&#x308B;&#x305F;&#x3081;&#x306E;&#x88CF;&#x53E3;&#x304C;&#x5FC5;&#x8981;&#x3068;&#x306A;&#x3063;&#x3066;&#x3057;&#x307E;&#x3044;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x898F;&#x7D04;&#x304C; <code class="Ic">typedef</code>
+    &#x3092;&#x8981;&#x6C42;&#x3059;&#x308B;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x305D;&#x306E;&#x540D;&#x524D;&#x3092;&#x69CB;&#x9020;&#x4F53;&#x30BF;&#x30B0;&#x306B;&#x4E00;&#x81F4;&#x3055;&#x305B;&#x307E;&#x3059;&#x3002;
+    &#x6A19;&#x6E96; C &#x307E;&#x305F;&#x306F; POSIX
+    &#x306B;&#x3088;&#x3063;&#x3066;&#x660E;&#x793A;&#x3055;&#x308C;&#x305F;&#x3082;&#x306E;&#x3092;&#x9664;&#x3044;&#x3066;&#x306F;&#x3001;
+    &#x201C;<code class="Li">_t</code>&#x201D; &#x3067;&#x7D42;&#x308B; typedef
+    &#x3092;&#x907F;&#x3051;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>/* &#x69CB;&#x9020;&#x4F53;&#x540D;&#x3068; typedef &#x3092;&#x4E00;&#x81F4;&#x3055;&#x305B;&#x307E;&#x3059; */
+typedef		struct bar {
+	int	level;
+} BAR;
+typedef	int		foo;		/* &#x3053;&#x308C;&#x306F; foo &#x3067;&#x3059; */
+typedef	const long	baz;		/* &#x3053;&#x308C;&#x306F; baz &#x3067;&#x3059; */</pre>
+</div>
+<p class="Pp">&#x5168;&#x3066;&#x306E;&#x95A2;&#x6570;&#x306F;&#x3069;&#x3053;&#x304B;&#x3067;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x79C1;&#x7684;&#x306A;&#x95A2;&#x6570;
+    (&#x3059;&#x306A;&#x308F;&#x3061;&#x3001;&#x4ED6;&#x306E;&#x3069;&#x3053;&#x3067;&#x3082;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x306A;&#x3044;&#x95A2;&#x6570;&#x306A;&#x3069;)
+    &#x306E;&#x95A2;&#x6570;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x306F;&#x3001;
+    &#x6700;&#x521D;&#x306E;&#x30BD;&#x30FC;&#x30B9;&#x30E2;&#x30B8;&#x30E5;&#x30FC;&#x30EB;&#x306E;&#x5148;&#x982D;&#x306B;&#x7F6E;&#x304B;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x5358;&#x4E00;&#x306E;&#x30BD;&#x30FC;&#x30B9;&#x30E2;&#x30B8;&#x30E5;&#x30FC;&#x30EB;&#x306B;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x306A;&#x95A2;&#x6570;&#x306F;&#x3001;
+    <code class="Ic">static</code>
+    &#x3067;&#x5BA3;&#x8A00;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x306E;&#x5225;&#x306E;&#x90E8;&#x5206;&#x304B;&#x3089;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x95A2;&#x6570;&#x306F;&#x3001;
+    &#x95A2;&#x9023;&#x306E;&#x3042;&#x308B;&#x30A4;&#x30F3;&#x30AF;&#x30EB;&#x30FC;&#x30C9;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x4E2D;&#x3067;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x95A2;&#x6570;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x306F;&#x3001;&#x7570;&#x306A;&#x308B;&#x9806;&#x5E8F;&#x306E;&#x4F7F;&#x7528;&#x3092;&#x5F37;&#x5236;&#x3059;&#x308B;&#x7406;&#x7531;&#x304C;&#x306A;&#x3044;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;
+    &#x306A;&#x308B;&#x3079;&#x304F;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306E;&#x8AD6;&#x7406;&#x7684;&#x306A;&#x9806;&#x5E8F;&#x3067;&#x6574;&#x5217;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x8907;&#x6570;&#x306E;&#x30E2;&#x30B8;&#x30E5;&#x30FC;&#x30EB;&#x3067;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x306B;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x95A2;&#x6570;&#x306F;&#x3001;
+    &quot;<span class="Pa">extern.h</span>&quot;
+    &#x7B49;&#x306E;&#x5206;&#x96E2;&#x3057;&#x305F;&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x4E2D;&#x306B;&#x7F6E;&#x304B;&#x308C;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp"><code class="Dv">__P</code>
+    &#x30DE;&#x30AF;&#x30ED;&#x306F;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp">&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E; 50%
+    &#x304B;&#x305D;&#x308C;&#x4EE5;&#x4E0A;&#x3092;&#x5DFB;&#x304D;&#x8FBC;&#x3093;&#x3060;&#x4FEE;&#x6B63;&#x306E;&#x5834;&#x5408;&#x306F;&#x3001;
+    &#x4E00;&#x822C;&#x306B;&#x30B3;&#x30FC;&#x30C9;&#x306F;
+    &#x201C;&#x65B0;&#x3057;&#x3044;&#x30B3;&#x30FC;&#x30C9;&#x201D;
+    &#x3068;&#x307F;&#x306A;&#x3059;&#x3053;&#x3068;&#x304C;&#x3067;&#x304D;&#x307E;&#x3059;&#x3002;
+    &#x3053;&#x308C;&#x306F;&#x65E2;&#x5B58;&#x306E;&#x30B3;&#x30FC;&#x30C9;&#x306E;&#x6163;&#x4F8B;&#x3092;&#x7834;&#x308A;&#x3001;
+    &#x73FE;&#x5728;&#x306E; <code class="Nm">style</code>
+    &#x30AC;&#x30A4;&#x30C9;&#x30E9;&#x30A4;&#x30F3;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x306E;&#x306B;&#x5341;&#x5206;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x306F;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x306E;&#x578B;&#x306B;&#x95A2;&#x9023;&#x4ED8;&#x3051;&#x3089;&#x308C;&#x305F;&#x540D;&#x524D;&#x3092;&#x6301;&#x3061;&#x307E;&#x3059;&#x3002;
+    &#x4F8B;&#x3048;&#x3070;&#x3001;&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x5185;&#x3067;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>void	function(int fd);</pre>
+</div>
+<p class="Pp">&#x30E6;&#x30FC;&#x30B6;&#x30E9;&#x30F3;&#x30C9;&#x306E;&#x30A2;&#x30D7;&#x30EA;&#x30B1;&#x30FC;&#x30B7;&#x30E7;&#x30F3;&#x306B;&#x5BFE;&#x3057;&#x3066;&#x898B;&#x3048;&#x308B;&#x30D8;&#x30C3;&#x30C0;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x4E2D;&#x3067;&#x306F;&#x3001;
+    &#x53EF;&#x8996;&#x306E;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x306F;&#x3001;
+    &#x578B;&#x3092;&#x4F34;&#x3063;&#x305F;
+    &#x201C;&#x4FDD;&#x8B77;&#x3055;&#x308C;&#x305F;&#x201D;
+    (&#x30A2;&#x30F3;&#x30C0;&#x30B9;&#x30B3;&#x30A2;&#x3067;&#x958B;&#x59CB;&#x3059;&#x308B;)
+    &#x540D;&#x524D;&#x3092;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x304B;&#x3001;
+    &#x578B;&#x3060;&#x3051;&#x3067;&#x540D;&#x524D;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x306A;&#x3044;&#x304B;&#x306E;&#x3069;&#x3061;&#x3089;&#x304B;&#x304C;&#x5FC5;&#x8981;&#x3067;&#x3059;&#x3002;
+    &#x4FDD;&#x8B77;&#x3055;&#x308C;&#x305F;&#x540D;&#x524D;&#x306E;&#x4F7F;&#x7528;&#x304C;&#x3088;&#x308A;&#x671B;&#x307E;&#x3057;&#x3044;&#x3067;&#x3059;&#x3002;
+    &#x4F8B;&#x3048;&#x3070;&#x3001;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>void	function(int);</pre>
+</div>
+<p class="Pp">&#x307E;&#x305F;&#x306F;</p>
+<div class="Bd Pp Li">
+<pre>void	function(int _fd);</pre>
+</div>
+<p class="Pp">&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x306F;&#x95A2;&#x6570;&#x540D;&#x306E;&#x884C;&#x63C3;&#x3048;&#x3092;&#x884C;&#x306A;&#x3046;&#x305F;&#x3081;&#x306B;&#x3001;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;
+    &#x30BF;&#x30D6;&#x306E;&#x5F8C;&#x306B;&#x8FFD;&#x52A0;&#x306E;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x6587;&#x5B57;&#x3092;&#x7F6E;&#x3044;&#x3066;&#x3082;&#x69CB;&#x3044;&#x307E;&#x305B;&#x3093;:</p>
+<div class="Bd Pp Li">
+<pre>static char	*function(int _arg, const char *_arg2, struct foo *_arg3,
+		    struct bar *_arg4);
+static void	 usage(void);
+
+/*
+ * &#x5168;&#x3066;&#x306E;&#x4E3B;&#x8981;&#x306A;&#x30EB;&#x30FC;&#x30C1;&#x30F3;&#x306F;&#x305D;&#x308C;&#x304C;&#x4F55;&#x3092;&#x3059;&#x308B;&#x306E;&#x304B;&#x3092;&#x7C21;&#x6F54;&#x306B;&#x8A18;&#x8FF0;&#x3057;&#x305F;
+ * &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x6301;&#x3064;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002; &quot;main&quot; &#x30EB;&#x30FC;&#x30C1;&#x30F3;&#x306E;&#x524D;&#x306E;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;
+ * &#x305D;&#x306E;&#x30D7;&#x30ED;&#x30B0;&#x30E9;&#x30E0;&#x304C;&#x4F55;&#x3092;&#x3059;&#x308B;&#x306E;&#x304B;&#x3092;&#x8A18;&#x8FF0;&#x3059;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+ */
+int
+main(int argc, char *argv[])
+{
+	char *ep;
+	long num;
+	int ch;</pre>
+</div>
+<p class="Pp">&#x4E00;&#x8CAB;&#x6027;&#x306E;&#x305F;&#x3081;&#x306B;&#x3001;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x306E;&#x89E3;&#x6790;&#x306B;&#x306F;
+    <a class="Xr" aria-label="getopt, section 3">getopt(3)</a>
+    &#x304C;&#x4F7F;&#x7528;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    <a class="Xr" aria-label="getopt, section 3">getopt(3)</a>
+    &#x547C;&#x3073;&#x51FA;&#x3057;&#x3068; <code class="Ic">switch</code>
+    &#x6587;&#x3067;&#x306F;&#x3001;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x3092;&#x30BD;&#x30FC;&#x30C8;&#x3059;&#x3079;&#x304D;&#x3067;&#x3059;&#x304C;&#x3001;
+    <code class="Ic">switch</code>
+    &#x6587;&#x306E;&#x30AB;&#x30B9;&#x30B1;&#x30FC;&#x30C9;&#x306E;&#x4E00;&#x90E8;&#x306E;&#x5834;&#x5408;&#x306F;&#x4F8B;&#x5916;&#x3067;&#x3059;&#x3002;
+    <code class="Ic">switch</code>
+    &#x6587;&#x306E;&#x30AB;&#x30B9;&#x30B1;&#x30FC;&#x30C9;&#x8981;&#x7D20;&#x306F;
+    <code class="Li">FALLTHROUGH</code>
+    &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x6301;&#x3064;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x6570;&#x5024;&#x306E;&#x5F15;&#x6570;&#x306F;&#x7CBE;&#x5EA6;&#x3092;&#x30C1;&#x30A7;&#x30C3;&#x30AF;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x5230;&#x9054;&#x3067;&#x304D;&#x306A;&#x3044;&#x30B3;&#x30FC;&#x30C9;&#x306F;
+    <code class="Li">NOTREACHED</code>
+    &#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x3092;&#x6301;&#x3064;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	while ((ch = getopt(argc, argv, &quot;abNn:&quot;)) != -1)
+		switch (ch) {		/* switch &#x3092;&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8; */
+		case 'a':		/* case &#x306F;&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8;&#x3057;&#x306A;&#x3044; */
+			aflag = 1;
+			/* FALLTHROUGH */
+		case 'b':
+			bflag = 1;
+			break;
+		case 'N':
+			Nflag = 1;
+			break;
+		case 'n':
+			num = strtol(optarg, &amp;ep, 10);
+			if (num &lt;= 0 || *ep != '\0') {
+				warnx(&quot;illegal number, -n argument -- %s&quot;,
+				    optarg);
+				usage();
+			}
+			break;
+		case '?':
+		default:
+			usage();
+			/* NOTREACHED */
+		}
+	argc -= optind;
+	argv += optind;</pre>
+</div>
+<p class="Pp">&#x4E88;&#x7D04;&#x8A9E; (<code class="Ic">if</code>,
+    <code class="Ic">while</code>, <code class="Ic">for</code>,
+    <code class="Ic">return</code>, <code class="Ic">switch</code>)
+    &#x306E;&#x5F8C;&#x306B;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x5165;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x4F55;&#x3082;&#x4F34;&#x308F;&#x306A;&#x3044;&#x304B;&#x3001;&#x305F;&#x3060;
+    1
+    &#x3064;&#x306E;&#x6587;&#x3092;&#x4F34;&#x3046;&#x5236;&#x5FA1;&#x6587;&#x306F;&#x3001;&#x30D6;&#x30EC;&#x30FC;&#x30B9;
+    (&#x2018;<code class="Li">{</code>&#x2019; &#x304A;&#x3088;&#x3073;
+    &#x2018;<code class="Li">}</code>&#x2019;)
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002; 1
+    &#x3064;&#x306E;&#x6587;&#x304C;
+    &#x8907;&#x6570;&#x884C;&#x3067;&#x3042;&#x308B;&#x6587;&#x306E;&#x5834;&#x5408;&#x306B;&#x306F;&#x3001;&#x3053;&#x308C;&#x306F;&#x8A31;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x7121;&#x9650;&#x30EB;&#x30FC;&#x30D7;&#x306F;
+    <code class="Ic">while</code> &#x3067;&#x306F;&#x306A;&#x304F;
+    <code class="Ic">for</code>
+    &#x3067;&#x884C;&#x306A;&#x3044;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	for (p = buf; *p != '\0'; ++p)
+		;	/* &#x4F55;&#x3082;&#x306A;&#x3057; */
+	for (;;)
+		stmt;
+	for (;;) {
+		z = a + really + long + statement + that + needs +
+		    two + lines + gets + indented + four + spaces +
+		    on + the + second + and + subsequent + lines;
+	}
+	for (;;) {
+		if (cond)
+			stmt;
+	}
+	if (val != NULL)
+		val = realloc(val, newsize);</pre>
+</div>
+<p class="Pp"><code class="Ic">for</code>
+    &#x30EB;&#x30FC;&#x30D7;&#x306E;&#x5404;&#x90E8;&#x306F;&#x7A7A;&#x306E;&#x307E;&#x307E;&#x6B8B;&#x3057;&#x3066;&#x3082;&#x69CB;&#x3044;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x7570;&#x5E38;&#x306B;&#x8907;&#x96D1;&#x306A;&#x30EB;&#x30FC;&#x30C1;&#x30F3;&#x3067;&#x306A;&#x3044;&#x9650;&#x308A;&#x306F;&#x3001;&#x30D6;&#x30ED;&#x30C3;&#x30AF;&#x306E;&#x4E2D;&#x306B;&#x5BA3;&#x8A00;&#x3092;&#x7F6E;&#x3044;&#x3066;&#x306F;&#x306A;&#x308A;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	for (; cnt &lt; 15; cnt++) {
+		stmt1;
+		stmt2;
+	}</pre>
+</div>
+<p class="Pp">&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8;&#x306F; 8
+    &#x6587;&#x5B57;&#x306E;&#x30BF;&#x30D6;&#x3067;&#x3059;&#x3002; &#x7B2C; 2
+    &#x30EC;&#x30D9;&#x30EB;&#x306E;&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8;&#x306F;
+    4
+    &#x6587;&#x5B57;&#x306E;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3067;&#x3059;&#x3002;
+    &#x9577;&#x3044;&#x5206;&#x3092;&#x6298;&#x308A;&#x8FD4;&#x3059;&#x5FC5;&#x8981;&#x304C;&#x3042;&#x308B;&#x5834;&#x5408;&#x3001;&#x30AA;&#x30DA;&#x30EC;&#x30FC;&#x30BF;&#x3092;&#x884C;&#x672B;&#x306B;&#x7F6E;&#x304D;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	while (cnt &lt; 20 &amp;&amp; this_variable_name_is_too_long &amp;&amp;
+	    ep != NULL)
+		z = a + really + long + statement + that + needs +
+		    two + lines + gets + indented + four + spaces +
+		    on + the + second + and + subsequent + lines;</pre>
+</div>
+<p class="Pp">&#x7A7A;&#x767D;&#x6587;&#x5B57;&#x3092;&#x884C;&#x672B;&#x306B;&#x8FFD;&#x52A0;&#x3057;&#x3066;&#x306F;&#x3044;&#x3051;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x307E;&#x305F;&#x3001;&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8;&#x3092;&#x5F62;&#x6210;&#x3059;&#x308B;&#x305F;&#x3081;&#x306B;&#x306F;&#x3001;&#x30BF;&#x30D6;&#x3068;&#x305D;&#x306E;&#x5F8C;&#x306B;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x306E;&#x307F;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x30BF;&#x30D6;&#x304C;&#x751F;&#x307F;&#x51FA;&#x3059;&#x4EE5;&#x4E0A;&#x306E;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3084;&#x3001;&#x30BF;&#x30D6;&#x306E;&#x524D;&#x306E;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x306F;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp">&#x30D6;&#x30EC;&#x30FC;&#x30B9;&#x306E;&#x7D42;&#x4E86;&#x3068;&#x958B;&#x59CB;&#x306F;
+    <code class="Ic">else</code>
+    &#x3068;&#x540C;&#x3058;&#x884C;&#x306B;&#x7F6E;&#x304B;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x5FC5;&#x8981;&#x3067;&#x306A;&#x3044;&#x30D6;&#x30EC;&#x30FC;&#x30B9;&#x306F;&#x7701;&#x3044;&#x3066;&#x3082;&#x69CB;&#x3044;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	if (test)
+		stmt;
+	else if (bar) {
+		stmt;
+		stmt;
+	} else
+		stmt;</pre>
+</div>
+<p class="Pp">&#x95A2;&#x6570;&#x540D;&#x306E;&#x5F8C;&#x306F;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x7A7A;&#x3051;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x30B3;&#x30F3;&#x30DE;&#x306E;&#x5F8C;&#x306B;&#x306F;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x6301;&#x3061;&#x307E;&#x3059;&#x3002;
+    &#x2018;<code class="Li">(</code>&#x2019; &#x307E;&#x305F;&#x306F;
+    &#x2018;<code class="Li">[</code>&#x2019;
+    &#x306E;&#x5F8C;&#x308D;&#x307E;&#x305F;&#x306F;
+    &#x2018;<code class="Li">]</code>&#x2019; &#x307E;&#x305F;&#x306F;
+    &#x2018;<code class="Li">)</code>&#x2019;
+    &#x306E;&#x524D;&#x306B;&#x306F;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x7A7A;&#x3051;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	error = function(a1, a2);
+	if (error != 0)
+		exit(error);</pre>
+</div>
+<p class="Pp">&#x5358;&#x9805;&#x6F14;&#x7B97;&#x5B50;&#x306F;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x8981;&#x6C42;&#x3057;&#x307E;&#x305B;&#x3093;&#x304C;&#x3001;&#x4E8C;&#x9805;&#x6F14;&#x7B97;&#x5B50;&#x306F;&#x8981;&#x6C42;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x512A;&#x5148;&#x9806;&#x4F4D;&#x304C;&#x8981;&#x6C42;&#x3059;&#x308B;&#x5834;&#x5408;&#x307E;&#x305F;&#x306F;&#x6587;&#x304C;&#x62EC;&#x5F27;&#x306A;&#x3057;&#x3067;&#x306F;&#x6DF7;&#x4E71;&#x3059;&#x308B;&#x5834;&#x5408;&#x4EE5;&#x5916;&#x306F;&#x3001;
+    &#x62EC;&#x5F27;&#x306F;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x4ED6;&#x4EBA;&#x306F;&#x3042;&#x306A;&#x305F;&#x3088;&#x308A;&#x3082;&#x6DF7;&#x4E71;&#x3057;&#x3084;&#x3059;&#x3044;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x3068;&#x3044;&#x3046;&#x3053;&#x3068;&#x3092;&#x899A;&#x3048;&#x3066;&#x304A;&#x3044;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x3042;&#x306A;&#x305F;&#x306F;&#x4EE5;&#x4E0B;&#x3092;&#x7406;&#x89E3;&#x3067;&#x304D;&#x307E;&#x3059;&#x304B;?</p>
+<div class="Bd Pp Li">
+<pre>	a = b-&gt;c[0] + ~d == (e || f) || g &amp;&amp; h ? i : j &gt;&gt; 1;
+	k = !(l &amp; FLAGS);</pre>
+</div>
+<p class="Pp">&#x6210;&#x529F;&#x6642;&#x306B;&#x306F; 0
+    &#x3067;&#x3001;&#x307E;&#x305F;&#x306F; <a class="Xr" aria-label="sysexits,
+    section 3">sysexits(3)</a>
+    &#x306B;&#x3042;&#x3089;&#x304B;&#x3058;&#x3081;&#x5B9A;&#x7FA9;&#x3057;&#x3066;&#x3042;&#x308B;&#x5024;&#x3067;
+    exit &#x3059;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	exit(EX_OK);	/*
+			 * &quot;Exit 0 on success.&quot; (&#x6210;&#x529F;&#x6642;&#x306F; 0 &#x3067;&#x7D42;&#x4E86;)
+			 * &#x306E;&#x69D8;&#x306B;&#x5206;&#x304B;&#x308A;&#x304D;&#x3063;&#x305F;&#x30B3;&#x30E1;&#x30F3;&#x30C8;&#x306F;&#x907F;&#x3051;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;
+			 */
+}</pre>
+</div>
+<p class="Pp">&#x95A2;&#x6570;&#x306E;&#x578B;&#x306F;&#x3001;&#x95A2;&#x6570;&#x81EA;&#x8EAB;&#x306B;&#x5148;&#x884C;&#x3059;&#x308B;&#x884C;&#x306B;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x95A2;&#x6570;&#x306E;&#x672C;&#x4F53;&#x306E;&#x958B;&#x59CB;&#x306E;&#x30D6;&#x30EC;&#x30FC;&#x30B9;&#x306F;&#x3001;&#x5358;&#x72EC;&#x3067;
+    1
+  &#x884C;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>static char *
+function(int a1, int a2, float fl, int a4)
+{</pre>
+</div>
+<p class="Pp">&#x95A2;&#x6570;&#x306E;&#x4E2D;&#x3067;&#x5909;&#x6570;&#x3092;&#x5BA3;&#x8A00;&#x3059;&#x308B;&#x6642;&#x306B;&#x306F;&#x3001;&#x30B5;&#x30A4;&#x30BA;&#x9806;&#x306B;&#x3001;&#x6B21;&#x306B;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306B;
+    &#x30BD;&#x30FC;&#x30C8;&#x3057;&#x3066;&#x5BA3;&#x8A00;&#x3057;&#x307E;&#x3059;&#x3002;
+    1
+    &#x884C;&#x306B;&#x8907;&#x6570;&#x306E;&#x5BA3;&#x8A00;&#x306F;&#x53EF;&#x80FD;&#x3067;&#x3059;&#x3002;
+    &#x884C;&#x304C;&#x6EA2;&#x308C;&#x308B;&#x5834;&#x5408;&#x306F;&#x3001;&#x578B;&#x306E;&#x4E88;&#x7D04;&#x8A9E;&#x3092;&#x518D;&#x5EA6;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x5BA3;&#x8A00;&#x6642;&#x306B;&#x5909;&#x6570;&#x3092;&#x521D;&#x671F;&#x5316;&#x3059;&#x308B;&#x3053;&#x3068;&#x306B;&#x3088;&#x3063;&#x3066;&#x30B3;&#x30FC;&#x30C9;&#x3092;
+    &#x4E0D;&#x660E;&#x77AD;&#x306B;&#x3057;&#x306A;&#x3044;&#x69D8;&#x306B;&#x6CE8;&#x610F;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x3053;&#x306E;&#x6A5F;&#x80FD;&#x306F;&#x826F;&#x304F;&#x8003;&#x3048;&#x3066;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x521D;&#x671F;&#x5316;&#x306B;&#x95A2;&#x6570;&#x547C;&#x3073;&#x51FA;&#x3057;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x306A;&#x3044;&#x3067;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	struct foo one, *two;
+	double three;
+	int *four, five;
+	char *six, seven, eight, nine, ten, eleven, twelve;
+
+	four = myfunction();</pre>
+</div>
+<p class="Pp">&#x4ED6;&#x306E;&#x95A2;&#x6570;&#x306E;&#x5185;&#x90E8;&#x3067;&#x95A2;&#x6570;&#x3092;&#x5BA3;&#x8A00;&#x3057;&#x306A;&#x3044;&#x3067;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    ANSI C
+    &#x306B;&#x3088;&#x308B;&#x3068;&#x3001;&#x3053;&#x306E;&#x3088;&#x3046;&#x306A;&#x5BA3;&#x8A00;&#x306F;&#x3001;&#x5BA3;&#x8A00;&#x306E;&#x30CD;&#x30B9;&#x30C6;&#x30A3;&#x30F3;&#x30B0;&#x306B;&#x3088;&#x3089;&#x305A;&#x3001;
+    &#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x30B9;&#x30B3;&#x30FC;&#x30D7;&#x306B;&#x306A;&#x308A;&#x307E;&#x3059;&#x3002;
+    &#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x30B9;&#x30B3;&#x30FC;&#x30D7;&#x306B;&#x898B;&#x3048;&#x308B;&#x3082;&#x306E;&#x306E;&#x4E2D;&#x306B;&#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306E;&#x5BA3;&#x8A00;&#x3092;&#x96A0;&#x3059;&#x3053;&#x3068;&#x306F;&#x597D;&#x307E;&#x3057;&#x304F;&#x306A;&#x304F;&#x3001;
+    &#x826F;&#x3044;&#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30E9;&#x306F;&#x82E6;&#x60C5;&#x3092;&#x8A00;&#x3044;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp" id="sizeof">&#x30AD;&#x30E3;&#x30B9;&#x30C8;&#x3068;
+    <code class="Ic">sizeof</code>
+    &#x6F14;&#x7B97;&#x5B50;&#x306E;&#x5F8C;&#x306B;&#x306F;&#x30B9;&#x30DA;&#x30FC;&#x30B9;&#x3092;&#x7D9A;&#x3051;&#x307E;&#x305B;&#x3093;&#x3002;
+    &#x3053;&#x306E;&#x898F;&#x5247;&#x306F; <a class="Xr" aria-label="indent,
+    section 1">indent(1)</a>
+    &#x304C;&#x7406;&#x89E3;&#x3057;&#x306A;&#x3044;&#x3053;&#x3068;&#x306B;&#x6CE8;&#x610F;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    <code class="Ic">sizeof</code>
+    &#x306F;&#x5E38;&#x306B;&#x62EC;&#x5F27;&#x3092;&#x3064;&#x3051;&#x3066;&#x66F8;&#x304B;&#x308C;&#x307E;&#x3059;&#x3002;
+    &#x5197;&#x9577;&#x306A;&#x62EC;&#x5F27;&#x306E;&#x898F;&#x5247;&#x306F;
+    <a class="permalink" href="#sizeof"><code class="Fn">sizeof</code></a>(<var class="Fa">var</var>)
+    &#x306E;&#x4E8B;&#x4F8B;&#x306B;&#x306F;&#x9069;&#x7528;&#x3055;&#x308C;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp"><code class="Dv">NULL</code>
+    &#x306F;&#x3001;&#x597D;&#x307E;&#x308C;&#x308B;&#x30CC;&#x30EB;&#x30DD;&#x30A4;&#x30F3;&#x30BF;&#x5B9A;&#x6570;&#x3067;&#x3059;&#x3002;
+    &#x30B3;&#x30F3;&#x30D1;&#x30A4;&#x30E9;&#x304C;&#x578B;&#x3092;&#x77E5;&#x3063;&#x3066;&#x3044;&#x308B;&#x6587;&#x8108;&#x3001;&#x4F8B;&#x3048;&#x3070;&#x4EE3;&#x5165;&#x3067;&#x306F;&#x3001;
+    (<var class="Vt">type *</var>)0 &#x307E;&#x305F;&#x306F;
+    (<var class="Vt">type *</var>)<code class="Dv">NULL</code>
+    &#x306E;&#x4EE3;&#x308F;&#x308A;&#x306B;&#x3001;
+    <code class="Dv">NULL</code>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x4ED6;&#x306E;&#x6587;&#x8108;&#x3067;&#x306F;&#x3001;&#x7279;&#x306B;&#x5168;&#x3066;&#x306E;&#x95A2;&#x6570;&#x306E;&#x5F15;&#x6570;&#x3067;&#x306F;&#x3001;
+    (<var class="Vt">type *</var>)<code class="Dv">NULL</code>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;
+    (&#x95A2;&#x6570;&#x306E;&#x30D7;&#x30ED;&#x30C8;&#x30BF;&#x30A4;&#x30D7;&#x304C;&#x30B9;&#x30B3;&#x30FC;&#x30D7;&#x5916;&#x304B;&#x3082;&#x3057;&#x308C;&#x306A;&#x3044;&#x5834;&#x5408;&#x306B;&#x3001;
+    &#x30AD;&#x30E3;&#x30B9;&#x30C8;&#x306F;&#x3044;&#x308D;&#x3044;&#x308D;&#x306A;&#x5F15;&#x6570;&#x306B;&#x3068;&#x3063;&#x3066;&#x5FC5;&#x9808;&#x3067;&#x3001;&#x305D;&#x306E;&#x4ED6;&#x306E;&#x5F15;&#x6570;&#x306B;&#x3068;&#x3063;&#x3066;&#x3082;&#x5FC5;&#x8981;&#x3067;&#x3059;&#x3002;)
+    &#x30DD;&#x30A4;&#x30F3;&#x30BF;&#x306F; <code class="Dv">NULL</code>
+    &#x3068;&#x6BD4;&#x8F03;&#x3057;&#x307E;&#x3059;&#x3002;
+    &#x4F8B;&#x3048;&#x3070;&#x3001;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x4F7F;&#x3044;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>(p = f()) == NULL</pre>
+</div>
+<p class="Pp">&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x306F;&#x4F7F;&#x3044;&#x307E;&#x305B;&#x3093;:</p>
+<div class="Bd Pp Li">
+<pre>!(p = f())</pre>
+</div>
+<p class="Pp">&#x771F;&#x7406;&#x5024; (&#x30D6;&#x30FC;&#x30EB;&#x5024;)
+    &#x3067;&#x306F;&#x306A;&#x3044;&#x5834;&#x5408;&#x3001;&#x30C6;&#x30B9;&#x30C8;&#x306B;&#x306F;
+    <code class="Ic">!</code>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x306A;&#x3044;&#x3067;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x4F8B;&#x3048;&#x3070;&#x3001;&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x4F7F;&#x3044;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>if (*p == '\0')</pre>
+</div>
+<p class="Pp">&#x6B21;&#x306E;&#x3088;&#x3046;&#x306B;&#x306F;&#x4F7F;&#x3044;&#x307E;&#x305B;&#x3093;:</p>
+<div class="Bd Pp Li">
+<pre>if (!*p)</pre>
+</div>
+<p class="Pp"><var class="Vt">void *</var>
+    &#x3092;&#x8FD4;&#x3059;&#x30EB;&#x30FC;&#x30C1;&#x30F3;&#x3067;&#x306F;&#x3001;
+    &#x623B;&#x308A;&#x5024;&#x3092;&#x3069;&#x306E;&#x30DD;&#x30A4;&#x30F3;&#x30BF;&#x578B;&#x306B;&#x3082;&#x30AD;&#x30E3;&#x30B9;&#x30C8;&#x3057;&#x3066;&#x306F;&#x306A;&#x308A;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp"><code class="Ic">return</code>
+    &#x6587;&#x306E;&#x5024;&#x306F;&#x62EC;&#x5F27;&#x3067;&#x56F2;&#x307E;&#x308C;&#x3066;&#x3044;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp"><a class="Xr" aria-label="err, section 3">err(3)</a>
+    &#x307E;&#x305F;&#x306F; <a class="Xr" aria-label="warn, section
+    3">warn(3)</a>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x3001;&#x52DD;&#x624B;&#x306B;&#x4F5C;&#x3089;&#x306A;&#x3044;&#x3067;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;</p>
+<div class="Bd Pp Li">
+<pre>	if ((four = malloc(sizeof(struct foo))) == NULL)
+		err(1, (char *)NULL);
+	if ((six = (int *)overflow()) == NULL)
+		errx(1, &quot;number overflowed&quot;);
+	return (eight);
+}</pre>
+</div>
+<p class="Pp">&#x53E4;&#x3044;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x306E;&#x95A2;&#x6570;&#x5BA3;&#x8A00;&#x306F;&#x3053;&#x306E;&#x3088;&#x3046;&#x306B;&#x306A;&#x3063;&#x3066;&#x3044;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>static char *
+function(a1, a2, fl, a4)
+	int a1, a2;	/* int &#x578B;&#x3082;&#x5BA3;&#x8A00;&#x3057;&#x307E;&#x3059;&#x3001;&#x30C7;&#x30D5;&#x30A9;&#x30EB;&#x30C8;&#x306B;&#x3057;&#x306A;&#x3044;&#x3053;&#x3068; */
+	float fl;	/* double &#x3068; float &#x306E;&#x9055;&#x3044;&#x306B;&#x6C17;&#x3092;&#x4ED8;&#x3051;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044; */
+	int a4;		/* &#x51FA;&#x3066;&#x304D;&#x305F;&#x9806;&#x306B;&#x5BA3;&#x8A00;&#x3057;&#x307E;&#x3059; */
+{</pre>
+</div>
+<p class="Pp">&#x3042;&#x306A;&#x305F;&#x304C;&#x660E;&#x78BA;&#x306B; K&amp;R
+    &#x3068;&#x306E;&#x4E92;&#x63DB;&#x6027;&#x3092;&#x5FC5;&#x8981;&#x3068;&#x3059;&#x308B;&#x5834;&#x5408;&#x4EE5;&#x5916;&#x306F;&#x3001;
+    ANSI
+    &#x306E;&#x95A2;&#x6570;&#x5BA3;&#x8A00;&#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x9577;&#x3044;&#x30D1;&#x30E9;&#x30E1;&#x30FC;&#x30BF;&#x30EA;&#x30B9;&#x30C8;&#x306E;&#x6298;&#x308A;&#x8FD4;&#x3057;&#x306B;&#x306F;&#x3001;
+    4
+    &#x500B;&#x306E;&#x7A7A;&#x767D;&#x306B;&#x3088;&#x308B;&#x901A;&#x5E38;&#x306E;&#x30A4;&#x30F3;&#x30C7;&#x30F3;&#x30C8;&#x3092;&#x4ED8;&#x3051;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x53EF;&#x5909;&#x500B;&#x6570;&#x306E;&#x5F15;&#x6570;&#x306F;&#x3053;&#x306E;&#x3088;&#x3046;&#x306B;&#x3057;&#x307E;&#x3059;:</p>
+<div class="Bd Pp Li">
+<pre>#include &lt;stdarg.h&gt;
+
+void
+vaf(const char *fmt, ...)
+{
+	va_list ap;
+
+	va_start(ap, fmt);
+	STUFF;
+	va_end(ap);
+	/* void &#x578B;&#x306E;&#x95A2;&#x6570;&#x306B; return &#x306F;&#x4E0D;&#x8981;&#x3067;&#x3059; */
+}
+
+static void
+usage()
+{
+	/* &#x95A2;&#x6570;&#x304C;&#x30ED;&#x30FC;&#x30AB;&#x30EB;&#x5909;&#x6570;&#x3092;&#x6301;&#x305F;&#x306A;&#x3044;&#x5834;&#x5408;&#x3001;&#x7A7A;&#x884C;&#x3092;&#x3044;&#x308C;&#x307E;&#x3059; */</pre>
+</div>
+<p class="Pp"><a class="Xr" aria-label="fputs, section 3">fputs(3)</a>,
+    <a class="Xr" aria-label="puts, section 3">puts(3)</a>,
+    <a class="Xr" aria-label="putchar, section 3">putchar(3)</a>
+    &#x7B49;&#x3067;&#x306F;&#x306A;&#x304F;&#x3001;
+    <a class="Xr" aria-label="printf, section 3">printf(3)</a>
+    &#x3092;&#x4F7F;&#x7528;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x3053;&#x308C;&#x306F;&#x901F;&#x304F;&#x3066;&#x5927;&#x62B5;&#x306F;&#x304D;&#x308C;&#x3044;&#x3067;&#x3001;&#x8A00;&#x3046;&#x307E;&#x3067;&#x3082;&#x306A;&#x304F;&#x3064;&#x307E;&#x3089;&#x306A;&#x3044;&#x30D0;&#x30B0;&#x3092;&#x907F;&#x3051;&#x307E;&#x3059;&#x3002;</p>
+<p class="Pp">&#x4F7F;&#x7528;&#x6CD5; (usage)
+    &#x306E;&#x6587;&#x306F;&#x30DE;&#x30CB;&#x30E5;&#x30A2;&#x30EB;&#x30DA;&#x30FC;&#x30B8;&#x306E;
+    <a class="Sx" href="#SYNOPSIS">SYNOPSIS</a> (&#x66F8;&#x5F0F;)
+    &#x306E;&#x69D8;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x4F7F;&#x7528;&#x6CD5;&#x306E;&#x6587;&#x306F;&#x3001;&#x6B21;&#x306E;&#x69CB;&#x9020;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;:</p>
+<ol class="Bl-enum">
+  <li>&#x30AA;&#x30DA;&#x30E9;&#x30F3;&#x30C9;&#x306E;&#x7121;&#x3044;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x304C;&#x3001;&#x6700;&#x521D;&#x306B;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306B;&#x3001;
+      1 &#x7D44;&#x306E;&#x5927;&#x62EC;&#x5F27;
+      (&#x2018;<code class="Li">[</code>&#x2019; &#x3068;
+      &#x2018;<code class="Li">]</code>&#x2019;)
+      &#x3067;&#x304F;&#x304F;&#x3089;&#x308C;&#x307E;&#x3059;&#x3002;</li>
+  <li>&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x3068;&#x305D;&#x306E;&#x30AA;&#x30DA;&#x30E9;&#x30F3;&#x30C9;&#x304C;&#x3053;&#x308C;&#x3082;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306B;&#x7D9A;&#x304D;&#x3001;
+      &#x305D;&#x308C;&#x305E;&#x308C;&#x306E;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x3068;&#x305D;&#x306E;&#x5F15;&#x6570;&#x3092;
+      1
+      &#x7D44;&#x306E;&#x5927;&#x62EC;&#x5F27;&#x3067;&#x304F;&#x304F;&#x308A;&#x307E;&#x3059;&#x3002;</li>
+  <li>&#x5FC5;&#x9808;&#x306E;&#x5F15;&#x6570;
+      (&#x3082;&#x3057;&#x3042;&#x308C;&#x3070;)
+      &#x304C;&#x7D9A;&#x304D;&#x3001;
+      &#x30B3;&#x30DE;&#x30F3;&#x30C9;&#x30E9;&#x30A4;&#x30F3;&#x3067;&#x6307;&#x5B9A;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x9806;&#x3067;&#x4E00;&#x89A7;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</li>
+  <li>&#x6700;&#x5F8C;&#x306B;&#x3001;
+      &#x3059;&#x3079;&#x3066;&#x306E;&#x4EFB;&#x610F;&#x306E;&#x5F15;&#x6570;&#x304C;&#x6307;&#x5B9A;&#x3055;&#x308C;&#x308B;&#x3079;&#x304D;&#x9806;&#x3067;&#x3001;
+      &#x3059;&#x3079;&#x3066;&#x5927;&#x62EC;&#x5F27;&#x306E;&#x4E2D;&#x306B;&#x4E00;&#x89A7;&#x3055;&#x308C;&#x307E;&#x3059;&#x3002;</li>
+</ol>
+<p class="Pp">&#x7E26;&#x68D2; (&#x2018;<code class="Li">|</code>&#x2019;)
+    &#x306F;&#x3001; &#x201C;&#x4E8C;&#x8005;&#x629E;&#x4E00;&#x201D;
+    &#x306E;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x307E;&#x305F;&#x306F;&#x5F15;&#x6570;&#x3092;&#x5206;&#x5272;&#x3057;&#x3001;
+    &#x540C;&#x6642;&#x306B;&#x4F7F;&#x7528;&#x3059;&#x308B;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x3068;&#x5F15;&#x6570;&#x306F;&#x3001;&#x5358;&#x4E00;&#x306E;&#x5927;&#x62EC;&#x5F27;&#x3067;&#x304F;&#x304F;&#x308A;&#x307E;&#x3059;&#x3002;</p>
+<div class="Bd Pp Bd-indent Li">
+<pre>&quot;usage: f [-aDde] [-b b_arg] [-m m_arg] req1 req2 [opt1 [opt2]]\n&quot;
+&quot;usage: f [-a | -b] [-c [-dEe] [-n number]]\n&quot;</pre>
+</div>
+<div class="Bd Pp Li">
+<pre>	(void)fprintf(stderr, &quot;usage: f [-ab]\n&quot;);
+	exit(EX_USAGE);
+}</pre>
+</div>
+<p class="Pp">&#x30DE;&#x30CB;&#x30E5;&#x30A2;&#x30EB;&#x30DA;&#x30FC;&#x30B8;&#x306E;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x8A18;&#x8FF0;&#x306F;&#x3001;
+    &#x7D14;&#x7C8B;&#x306A;&#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3042;&#x308B;&#x3053;&#x3068;&#x306B;&#x6CE8;&#x610F;&#x3057;&#x3066;&#x304F;&#x3060;&#x3055;&#x3044;&#x3002;
+    &#x3064;&#x307E;&#x308A;&#x3001;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;&#x304C;&#x5F15;&#x6570;&#x3092;&#x53D6;&#x308B;&#x304B;&#x5426;&#x304B;&#x306B;&#x95A2;&#x308F;&#x3089;&#x306A;&#x3044;&#x3068;&#x3044;&#x3046;&#x3053;&#x3068;&#x3067;&#x3059;&#x3002;
+    &#x30A2;&#x30EB;&#x30D5;&#x30A1;&#x30D9;&#x30C3;&#x30C8;&#x9806;&#x306F;&#x3001;&#x524D;&#x8FF0;&#x306E;&#x5927;&#x6587;&#x5B57;&#x5C0F;&#x6587;&#x5B57;&#x306E;&#x9806;&#x5E8F;&#x3092;&#x8003;&#x616E;&#x306B;&#x5165;&#x308C;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x65B0;&#x3057;&#x3044;&#x4E2D;&#x5FC3;&#x7684;&#x306A;&#x30AB;&#x30FC;&#x30CD;&#x30EB;&#x306E;&#x30B3;&#x30FC;&#x30C9;&#x306F;&#x3001;&#x9069;&#x5EA6;&#x306B;
+    <code class="Nm">style</code>
+    &#x30AC;&#x30A4;&#x30C9;&#x306B;&#x5F93;&#x3046;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x30B5;&#x30FC;&#x30C9;&#x30D1;&#x30FC;&#x30C6;&#x30A3;&#x304C;&#x4FDD;&#x5B88;&#x3059;&#x308B;&#x30E2;&#x30B8;&#x30E5;&#x30FC;&#x30EB;&#x3084;&#x30C7;&#x30D0;&#x30A4;&#x30B9;&#x30C9;&#x30E9;&#x30A4;&#x30D0;&#x306E;&#x305F;&#x3081;&#x306E;&#x30AC;&#x30A4;&#x30C9;&#x30E9;&#x30A4;&#x30F3;&#x306F;
+    &#x3088;&#x308A;&#x7DE9;&#x3084;&#x304B;&#x3067;&#x3059;&#x304C;&#x3001;&#x6700;&#x4F4E;&#x9650;&#x5185;&#x90E8;&#x7684;&#x306B;&#x306F;&#x5F7C;&#x3089;&#x306E;&#x4E00;&#x8CAB;&#x3057;&#x305F;&#x30B9;&#x30BF;&#x30A4;&#x30EB;&#x3067;&#x3042;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+<p class="Pp">&#x30BD;&#x30FC;&#x30B9;&#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x306E;&#x6587;&#x4F53;&#x306E;&#x5909;&#x66F4;
+    (&#x7A7A;&#x767D;&#x6587;&#x5B57;&#x306E;&#x5909;&#x66F4;&#x3092;&#x542B;&#x3080;)
+    &#x306F;&#x56F0;&#x96E3;&#x3067;&#x3001;
+    &#x6B63;&#x5F53;&#x306A;&#x7406;&#x7531;&#x306A;&#x3057;&#x306B;&#x306F;&#x907F;&#x3051;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;
+    &#x30EA;&#x30DD;&#x30B8;&#x30C8;&#x30EA;&#x306E;&#x4E2D;&#x306E;&#x304A;&#x304A;&#x3088;&#x305D;
+    <span class="Ux">FreeBSD</span> KNF <code class="Nm">style</code>
+    &#x306B;&#x9069;&#x5408;&#x3057;&#x3066;&#x3044;&#x308B;&#x30B3;&#x30FC;&#x30C9;&#x306F;&#x3001;&#x3053;&#x306E;&#x9069;&#x5408;&#x304B;&#x3089;&#x96E2;&#x308C;&#x3066;&#x306F;&#x306A;&#x308A;&#x307E;&#x305B;&#x3093;&#x3002;</p>
+<p class="Pp">&#x53EF;&#x80FD;&#x306A;&#x6642;&#x306B;&#x306F;&#x3044;&#x3064;&#x3067;&#x3082;&#x3001;
+    &#x30B3;&#x30FC;&#x30C9;&#x306F;&#x30B3;&#x30FC;&#x30C9;&#x30C1;&#x30A7;&#x30C3;&#x30AB;
+    (&#x4F8B;&#x3048;&#x3070;&#x3001; <a class="Xr" aria-label="lint, section
+    1">lint(1)</a> &#x307E;&#x305F;&#x306F; <code class="Nm">gcc</code>
+    <code class="Fl">-Wall</code>) &#x3092;
+    &#x901A;&#x904E;&#x3057;&#x3001;&#x767A;&#x751F;&#x3059;&#x308B;&#x8B66;&#x544A;&#x306F;&#x6700;&#x5C0F;&#x9650;&#x3068;&#x306A;&#x308B;&#x3079;&#x304D;&#x3067;&#x3059;&#x3002;</p>
+</section>
+<section class="Sh">
+<h2 class="Sh">&#x95A2;&#x9023;&#x9805;&#x76EE;</h2>
+<p class="Pp"><a class="Xr" aria-label="indent, section 1">indent(1)</a>,
+    <a class="Xr" aria-label="lint, section 1">lint(1)</a>,
+    <a class="Xr" aria-label="err, section 3">err(3)</a>,
+    <a class="Xr" aria-label="sysexits, section 3">sysexits(3)</a>,
+    <a class="Xr" aria-label="warn, section 3">warn(3)</a>,
+    <a class="Xr" aria-label="style.Makefile, section
+  5">style.Makefile(5)</a></p>
+</section>
+<section class="Sh">
+<h2 class="Sh">&#x6B74;&#x53F2;</h2>
+<p class="Pp">&#x3053;&#x306E;&#x30DA;&#x30FC;&#x30B8;&#x306F;
+    <span class="Ux">4.4BSD-Lite2</span>
+    &#x30EA;&#x30EA;&#x30FC;&#x30B9;&#x306E;
+    <span class="Pa">src/admin/style/style</span>
+    &#x30D5;&#x30A1;&#x30A4;&#x30EB;&#x306B;&#x5927;&#x304D;&#x304F;&#x57FA;&#x3065;&#x3044;&#x3066;&#x3044;&#x3066;&#x3001;
+    &#x73FE;&#x5728;&#x306E;&#x5B9F;&#x88C5;&#x3068;
+    <span class="Ux">FreeBSD</span>
+    &#x30D7;&#x30ED;&#x30B8;&#x30A7;&#x30AF;&#x30C8;&#x306E;&#x8981;&#x671B;&#x3092;&#x53CD;&#x6620;&#x3057;&#x3066;&#x3001;&#x983B;&#x7E41;&#x306B;&#x66F4;&#x65B0;&#x3057;&#x3066;&#x3044;&#x307E;&#x3059;&#x3002;</p>
+</section>
+</main>
+<div class="foot" role="doc-pagefooter" aria-label="Manual footer
+  line"><span class="foot-left">FreeBSD XX.X-RELEASE</span>
+  <span class="foot-date">December 7, 2001</span>
+  <span class="foot-right">STYLE(9)</span></div>
+</body>
+</html>

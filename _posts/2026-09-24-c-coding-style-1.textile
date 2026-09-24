@@ -1,0 +1,238 @@
+---
+title: コーディング規約を決めるときに考えたこと（１）
+category: coding
+tags: style
+---
+h2. はじめに
+
+h3. 背景
+
+コードを書く時、その見た目がどのようになっていると美しいかをよく考えていた
+空白はどこに入って、空行がどこにあるときれいに見えるか
+コードの見た目がきれいだと分かりやすく読みやすい
+
+学生時代、Ｃでプログラムを書き始めたころ、コードを書くたびに
+「こちらの書き方のほうが見やすいか？」などと考えているとプログラミングが進まないので
+自分なりにこうだろうと考えたものを決め、それにあわせてコードを書くようにしていた
+
+仕事で何度かコーディング規約を決めることがあり様々なコーディング規約を調べたりもした
+その際にどのようなことを考えて決めてきたかを書くことにする
+
+h3. 前提
+
+コーディング規約と一口に言ってもそれが規定するものには様々なレベルがある
+ここではコーディング規約の中でも主にif文やインデント等のスタイルについて述べる
+組み込み系の業務に携わることが多かったので、とりあげるのはＣ言語の場合になるが
+Ｃに似た構文を使うものは多数あるので同じ考え方が使えると思う
+
+どういうコーディング規約を採用すればいいかを悩んでいる人に向けては
+以下から始めてみては？と言っておく
+* "Google C++ Style Guide":https://google.github.io/styleguide/cppguide.html
+* "Google C++ スタイルガイド 日本語全訳":https://ttsuki.github.io/styleguide/cppguide.ja.html
+
+ＣとＣ＋＋の言語の差により、Ｃ＋＋のスタイルガイドをＣのコードに適用しようとしても難しいものもあるが、スタートとしては悪くないと思う
+
+p(text-muted). コーディング規約（あるいは世の中のほとんどのもの）に対して唯一絶対の正解というものがあるとは考えていない
+あらゆるものには例外が存在すると考える
+先ほど勧めたGoogleのスタイルガイドも、自分で勧めておいてなんだが全部正しいのでその通りにしたほうがいいというわけではない
+
+h2. 様々なコーディング規約
+
+先ずは世の中にあるコーディング規約の紹介から
+
+h3. K&Rスタイル
+
+コーディング規約として決められたものではないが、C言語の原典であるK&Rで用いられているスタイル
+本の中でも『自分に合ったスタイルを選び、それを一貫して使うのがよい。』となっていて、こうすべきと厳密に書かれたものではないので、本の中でも表記がそろっていなかったりするが、だいたい以下のような感じ（ＬＬＭにK&Rスタイルの例を出力させたもの）
+
+{% highlight c %}
+int check_number(int value)
+{
+    if (value > 0) {
+        printf("Positive\n");
+    } else if (value < 0) {
+        printf("Negative\n");
+    } else {
+        printf("Zero\n");
+    }
+
+    return 0;
+}
+{% endhighlight %}
+
+原点にして頂点とも言え、かなり見やすい
+
+h3. Google C++ Style Guide
+
+"Looping and branching statements":https://google.github.io/styleguide/cppguide.html#Formatting_Looping_Branching
+
+{% highlight c %}
+if (condition) {                   // Good - no spaces inside parentheses, space before brace.
+  DoOneThing();                    // Good - two-space indent.
+  DoAnotherThing();
+} else if (int a = f(); a != 3) {  // Good - closing brace on new line, else on same line.
+  DoAThirdThing(a);
+} else {
+  DoNothing();
+}
+{% endhighlight %}
+
+"Function Declarations and Definitions":https://google.github.io/styleguide/cppguide.html#Function_Declarations_and_Definitions
+
+{% highlight c++ %}
+ReturnType ClassName::FunctionName(Type par_name1, Type par_name2) {
+  DoSomething();
+  ...
+}
+{% endhighlight %}
+
+{% quote  %}
+開き波括弧{は常に関数宣言の最後の行に書きます。次の行の頭ではありません。
+{% endquote %}
+
+K&Rとほぼ同じだが、関数本体の始まりである開き波括弧 @{@ を行頭に置かないところが違う
+K&Rが書かれた頃とは違いプロトタイプ宣言が当たり前の中で、関数の最初の @{@ だけを特別に行頭に置くよりも、if文その他と同じように @{@ を行の最後に置くスタイルに揃えたほうがルールとして統一感があると考えたのかもしれない
+K&Rも見やすいのでどちらでもいいと思うが、きちんと文書化されていて他人に説明しやすい（自分で資料を書かなくて済む）という側面もあるので、とりあえず "Google C++ Style Guide":https://google.github.io/styleguide/cppguide.html ということにしておいてもいいと思う
+
+h3. BSD Kernel Normal Form (KNF)
+
+FreeBSD の "man style":https://man.freebsd.org/cgi/man.cgi?style(9) などで見られる
+少し古い（バージョン未確認）が "日本語訳":{% link assets/posts/2026-09-24-c-coding-style-1/man-style-ja.html %} もある
+（内容が古くなっているということで削除されていて日本語版を探すのに苦労した、その話はいずれ）
+自分が最初にスタイルガイドとして認識したのはこれだと思う
+
+{% quote  %}
+予約語 (if, while, for, return, switch) の後にスペースを入れます。
+何も伴わないか、ただ 1 つの文を伴う制御文は、ブレース (‘{’ および ‘}’) を使用しません。
+1 つの文が 複数行である文の場合には、これは許されます。
+無限ループは while ではなく for で行ないます。
+{% endquote %}
+_確認したところ英語の原文は "２０１５年に改定":https://cgit.freebsd.org/src/commit/share/man/man9/style.9?id=abb14e5deda396bc3fb070ec80cb8a6ced66dd87 されていたが、いったん日本語訳をそのまま載せる_
+
+{% highlight c %}
+if (test)
+	stmt;
+else if (bar) {
+	stmt;
+	stmt;
+} else
+	stmt;
+{% endhighlight %}
+
+{% highlight c %}
+for (;;) {
+	if (cond)
+		stmt;
+}
+{% endhighlight %}
+
+Ｃの文法上 @{}@ が省略可能な場合は使わないようにして無駄な行を減らすという思想だったのだろう
+K&Rに載っているコード例もＣの文法を説明するものなので省略可能な @{}@ は書かれていなかったりするが、K&Rが『自分に合ったスタイル…』と述べているのに対して、KNFでは明示的に禁止していた（改定前まで）
+
+文が１行しかない時に @{}@ を禁止するのには賛同しかねるので、自分は「１行しかなくても（省略可能な場合でも）必ず @{}@ を使う」というスタイルを採用していた
+理由は、書く行数によってスタイルを変えないといけないことにすると、コードを書いている途中で手間がかかるから
+最初は１行と思って @{}@ を省略したけど、もう１行処理を足そうと思って @{}@ を足して、やっぱり１行でいいやと思って @{}@ を消す、とかだとスタイルを毎回変えることになって余計な手間が発生する
+
+そして本POSTを書くにあたって英文と日本語訳を見比べていて、スタイルガイドが改定されていることに気が付いた
+
+{% quote  %}
+Two styles of braces (`{' and `}') are allowed for single line statements.
+Either they are used for all single statements,
+or they are used only where needed for clarity.
+Usage within a function should be consistent.
+{% endquote %}
+
+{% quote  %}
+（意訳）
+1行の処理に対する波括弧（{ と }）は、以下の2つのスタイルのいずれかが認められる
+# すべての1行処理に対して、例外なく波括弧をつける
+# 基本はつけず、可読性を保つために必要な箇所にだけ波括弧をつける
+
+どちらのスタイルを採用する場合でも、同じ関数の中では統一すること
+{% endquote %}
+
+現在は１行しかない処理にブレース（波括弧）を付けるスタイルでもいいようだ
+（ただしサンプルコードは全て @{}@ を書かないほうのスタイルだ）
+
+KNFで見たので無限ループを書くとき（ほとんどないが）には @for@ を使うようにしている
+
+{% quote  %}
+インデントは8文字のタブです。
+{% endquote %}
+
+インデントに８文字のタブを使うのも特徴的だ
+インデントを多めにするのは「８文字のインデントで見にくくなるほどネストを深くするな！」という意味があるらしいと聞くが、都合によりネストが深くなるケースもあるだろうからちょっとやりすぎではなかろうか
+逆に先ほどの Google はインデントが２文字で、多少ネストが増えても１行が長くなりすぎることはないが、詰まりすぎて見にくい感じがするので自分が採用してきたのはK&Rと同じ４文字だ
+
+ネストについてコメントしておくと、以前「ネストはｎ段まで」のように決められたプロジェクトがあって、そのソースコードレビューに参加したら「そのままだとネストの段数が規約違反になったので、ネストが深くならないように一時変数を追加してif文を別の行に書きました」と言い出すメンバがいて閉口した
+もともとネストの段数を制限しようとしたのは複雑度を下げるためと思われるが、ネストの段数を減らすために、変数を追加してコードを複雑にするって本末転倒だ
+そのレビューでの一時変数は削除させたが、ルールを一律に適用しようとするとそういうことをしだす輩もいるので、ルールを決めるのは難しい
+
+{% quote  %}
+関数の型は、関数自身に先行する行にあるべきです。
+{% endquote %}
+
+{% highlight c %}
+static char *
+function(int a1, int a2, float fl, int a4, struct bar *bar)
+{
+{% endhighlight %}
+
+関数の型を関数名とは別の行に書かせるのがK&RやGoogleとは異なる
+関数名が先頭にあるほうが関数名が見やすく、探しやすい
+TypeScriptやRustなど型を後置するものは同様の考え方であると思う
+Ｃ＋＋だとメソッドを定義する際に関数名の前にクラス名等、色々と書くものがあるので、型だけを別の行にしてもそれほど見やすさが変わらない（のでそのまま同じ行の先頭に書く）と考えたのがGoogleのガイドではないかと想像する
+
+h3. GNU coding standards
+
+"GNU coding standards":https://www.gnu.org/prep/standards/
+"Formatting Your Source Code":https://www.gnu.org/prep/standards/html_node/Formatting.html
+
+{% quote  %}
+It is also important for function definitions to start the name of the function in column one.
+This helps people to search for function definitions, and may also help certain tools recognize them. 
+関数定義では、関数名を1列目から始めることも重要です。
+これは、関数定義の検索を容易にし、特定のツールが関数定義を認識するのに役立つ場合があります。
+{% endquote %}
+{% highlight c %}
+static char *
+concat (char *s1, char *s2)
+{
+  …
+}
+{% endhighlight %}
+
+関数名を行頭に置くのはKNFと同じスタイル、それはいいとして…
+
+{% quote  %}
+For the body of the function, our recommended style looks like this: 
+関数の本体については、以下のようなスタイルを推奨します。
+{% endquote %}
+{% highlight c %}
+if (x < foo (y, z))
+  haha = bar[4] + 5;
+else
+  {
+    while (z)
+      {
+        haha += foo (z, z);
+        z--;
+      }
+    return ++x + bar ();
+  }
+{% endhighlight %}
+
+それぞれのスタイルにはそれぞれの哲学があって決めていると思われるが @{}@ を独立した行に置いてインデントも変えるこの書き方のデメリットがメリットを上回っているとは思えない
+ブロックの初めと終わりの対応関係を分かりやすくする？そうかもしれないがその分 @else@ や @while@ とのつながりが弱くなるし、制御構造と関係のない意図的に書いた独立したブロックが目立たなくなる
+一番の問題は行が増えることだが、それについては次回に書く
+
+h3. IPA
+
+"組込みソフトウェア開発向け コーディング作法ガイド［C言語版］":https://www.ipa.go.jp/archive/publish/secbooks20180629.html
+
+IPA（独立行政法人情報処理推進機構）のガイドでは『コーディングスタイルを統一する。』と書かれており、特定の書き方を勧めているわけではない
+代表的なスタイルとしてK&R、Allman、GNUが取り上げられている
+_（内容を引用しようと思ったが記載内容が不正確に思えたのでやめておく）_
+
+
+紹介するだけで長くなりすぎたので続きは（２）で
