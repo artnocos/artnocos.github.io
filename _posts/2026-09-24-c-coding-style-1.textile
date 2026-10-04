@@ -98,7 +98,7 @@ h3. BSD Kernel Normal Form (KNF)
 
 FreeBSD の "man style":https://man.freebsd.org/cgi/man.cgi?style(9) などで見られる
 少し古い（バージョン未確認）が "日本語訳":{% link assets/posts/2026-09-24-c-coding-style-1/man-style-ja.html %} もある
-（内容が古くなっているということで削除されていて日本語版を探すのに苦労した、その話はいずれ）
+（内容が古くなっているということで削除されていて日本語版を探すのに苦労した、その話は "こちら":{% post_url 2026-10-04-freebsd-man-jp %} ）
 自分が最初にスタイルガイドとして認識したのはこれだと思う
 
 {% quote  %}

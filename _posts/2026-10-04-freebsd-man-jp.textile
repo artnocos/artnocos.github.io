@@ -1,0 +1,86 @@
+---
+title: FreeBSD日本語マニュアルを読めるようにする
+category: freebsd
+tags: man jp
+---
+h2. まえがき
+
+FreeBSDの日本語マニュアルが簡単には見られなくなっていたので
+本家FreeBSDのGitHubリポジトリからデータをサルベージし、私家版として自分のGitHubに置いた
+
+以下はその私家版を読む手順
+
+p(text-muted). なおサルベージできたのがFreeBSD9.1の頃のものなので
+最新版のFreeBSDの内容とはあっていないものがある
+
+h2. 手順
+
+# ダウンロード（ *clone* ）
+GitHubから @clone@ する
+{% highlight sh %}
+git clone --depth 1 --branch v12.05 https://github.com/satoshi8732/freebsd-man-ja-private.git
+{% endhighlight %}
+'detached HEAD'がどうとか出力されるがそのままで大丈夫
+
+#_ @clone@ 先のフォルダを環境変数 *MANPATH* に設定
+どのフォルダに @clone@ したかによって書き方は変わるが
+例えば以下のような感じ
+（ホームディレクトリのDownloads直下に @clone@ した場合）
+{% highlight sh %}
+export MANPATH=~/Downloads/freebsd-man-ja-private:
+{% endhighlight %}
+@MANPATH@ の最後に ':' を付けているので日本語版がない場合は元々インストールされている英語版マニュアルが表示される
+（例えばFreeBSD13.2で追加された @man nproc@ など）
+<br />
+あるいは日本語版を見たいときだけ見えるようにするには
+エイリアスなどを使用してもいい
+{% highlight sh %}
+alias jman='MANPATH=~/Downloads/freebsd-man-ja-private: man'
+{% endhighlight %}
+
+
+h2. あとがき
+
+FreeBSD manの日本語訳は簡単に見られたはず…と思って探してみたら
+閲覧用のサイトが動かなくなっていたり
+最近のFreeBSDからは削除されていて簡単には見られなくなっていた
+（manを見るために久しぶりにFreeBSDをインストールしてみたのだが…）
+
+"削除は２０２６年６月に行われたようだ":https://cgit.freebsd.org/doc/commit/?id=6fc2900cf5d2ee233d8cbf9a9fd09216d343c790
+
+{% quote %}
+author	Sergio Carlavilla Delgado <carlavilla@FreeBSD.org>	*2026-06-21* 13:38:40 +0000
+committer	Sergio Carlavilla Delgado <carlavilla@FreeBSD.org>	2026-06-21 13:38:40 +0000
+
+Documentation: *Remove manual pages*
+The translated manual pages are totally *outdated.*
+
+Discussed with:	doceng@
+{% endquote %}
+削除される前のファイルを探し出して漢字コードをUTF-8に変換するなどして見られるようにしたが、何が起きたか（＝削除された）を確認するのに思いのほか時間がかかった
+削除された理由がメンテナンスされていないから("outdated")ということで内容は最新のものに追従していない
+ちょっと見比べて気付いたものだと例えば @man CC@ は日本語訳は @gcc@ にリンクされるようだが、FreeBSD14では @clang@ になっている
+
+本家のリポジトリは @make@ によりハードリンクを作って別名でマニュアルが検索できるようにしているようだが
+GitHubから @clone@ した状態でそのまま読めるようにするため、代わりにシンボリックリンクを作って格納してある
+
+{% highlight zsh %}
+for dd in man*; do
+  (
+    cd $dd
+    set -- $(make -V MLINKS)
+    while [ $# -ge 2 ]; do
+      ln -sfv "$1" "$2"
+      shift 2
+    done
+  )
+done
+{% endhighlight %}
+
+最近は自動翻訳が優秀なので本家の英語版を翻訳して読んでもいいのだろうが
+レイアウトが崩れたり翻訳しなくてもいいキーワードが微妙な日本語にされていたりということもあって読みにくい場合がある
+
+多少古いとはいえせっかく人手で訳したものがあるので、それらを見られるようにしておくのもいいだろうということで読める状態にしてみた
+
+この私家版はFreeBSD doc.gitで見つかったものから作成した
+本家のリポジトリにあるものよりも新しい版がありそうなのだが、検索で見つかったものはどれもリンクが切れていて実体が見つけられなかった
